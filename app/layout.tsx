@@ -5,6 +5,7 @@ import type { Metadata } from "next";
 import { Inter, Space_Grotesk } from "next/font/google";
 import { ReactNode } from "react";
 import { ThemeProvider } from "@/context/ThemeProvider";
+import { cn } from "@/lib/utils";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 const spaceGrotesk = Space_Grotesk({
@@ -19,7 +20,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <ThemeProvider>
+    <html lang="en" suppressHydrationWarning>
       <ClerkProvider
         appearance={{
           elements: {
@@ -30,12 +31,23 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           },
         }}
       >
-        <html lang="en">
-          <body className={inter.variable + " " + spaceGrotesk.variable}>
+        <body
+          className={cn(
+            inter.variable,
+            spaceGrotesk.variable,
+            "font-inter bg-background text-foreground",
+          )}
+        >
+          <ThemeProvider
+            defaultTheme="system"
+            attribute="class"
+            enableSystem
+            disableTransitionOnChange
+          >
             {children}
-          </body>
-        </html>
+          </ThemeProvider>
+        </body>
       </ClerkProvider>
-    </ThemeProvider>
+    </html>
   );
 }

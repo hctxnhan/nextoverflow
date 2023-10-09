@@ -4,57 +4,83 @@
 
 @import url("../styles/theme.css");
 
-body {
-  font-family: "Inter", sans-serif;
+@layer base {
+  :root {
+    --background: 146 33% 96%;
+    --foreground: 138 45% 10%;
+    --card: 146 33% 96%;
+    --card-foreground: 138 45% 10%;
+    --popover: 146 33% 96%;
+    --popover-foreground: 138 45% 10%;
+    --primary: 146 33% 41%;
+    --primary-foreground: 146 33% 96%;
+    --secondary: 138 46% 86%;
+    --secondary-foreground: 138 45% 10%;
+    --muted: 146 33% 20%;
+    --muted-foreground: 138 45% 70%;
+    --accent: 146 32% 47%;
+    --accent-foreground: 146 33% 96%;
+    --destructive: 0 85% 60%;
+    --destructive-foreground: 138 45% 10%;
+    --border: 146 33% 20%;
+    --input: 146 33% 20%;
+    --ring: 146 32% 40%;
+    --radius: 0.5rem;
+    --shadow: 166 91% 9% / 20%;
+
+    /* Custom color */
+    --background-darker: 150 9% 86%;
+    --background-lighter: 146 37% 96%;
+
+    --foreground-darker: 138 43% 9%;
+    --foreground-dark: 141 47% 6%;
+    --foreground-lighter: 137 22% 19%;
+    --foreground-light: 141 6% 46%;
+  }
+
+  :root[class~="dark"] {
+    --background: 146 33% 4%;
+    --foreground: 138 45% 90%;
+    --card: 146 33% 4%;
+    --card-foreground: 138 45% 90%;
+    --popover: 146 33% 4%;
+    --popover-foreground: 138 45% 90%;
+    --primary: 146 33% 59%;
+    --primary-foreground: 146 33% 4%;
+    --secondary: 138 46% 14%;
+    --secondary-foreground: 138 45% 90%;
+    --muted: 146 33% 80%;
+    --muted-foreground: 138 45% 90%;
+    --accent: 146 32% 53%;
+    --accent-foreground: 138 45% 90%;
+    --destructive: 0 62% 30%;
+    --destructive-foreground: 138 45% 10%;
+    --border: 146 33% 60%;
+    --input: 146 33% 80%;
+    --ring: 146 32% 60%;
+
+    /* Custom color */
+    --background-darker: 144 29% 3%;
+    --background-lighter: 150 9% 14%;
+
+    --foreground-darker: 140 22% 81%;
+    --foreground-dark: 137 6% 54%;
+    --foreground-lighter: 139 46% 92%;
+    --foreground-light: 137 47% 94%;
+  }
 }
 
 @layer utilities {
   .flex-center {
-    @apply flex justify-center items-center;
+    @apply flex items-center justify-center;
   }
 
   .flex-between {
-    @apply flex justify-between items-center;
+    @apply flex items-center justify-between;
   }
 
   .flex-start {
-    @apply flex justify-start items-center;
-  }
-
-  .card-wrapper {
-    @apply bg-light-900 dark:dark-gradient shadow-light-100 dark:shadow-dark-100;
-  }
-
-  .btn {
-    @apply bg-light-800 dark:bg-dark-300 !important;
-  }
-
-  .btn-secondary {
-    @apply bg-light-800 dark:bg-dark-400 !important;
-  }
-
-  .btn-tertiary {
-    @apply bg-light-700 dark:bg-dark-300 !important;
-  }
-
-  .markdown {
-    @apply max-w-full prose dark:prose-p:text-light-700 dark:prose-ol:text-light-700 dark:prose-ul:text-light-500 dark:prose-strong:text-white dark:prose-headings:text-white prose-headings:text-dark-400 prose-h1:text-dark-300 prose-h2:text-dark-300 prose-p:text-dark-500 prose-ul:text-dark-500 prose-ol:text-dark-500;
-  }
-
-  .primary-gradient {
-    background: linear-gradient(129deg, #ff7000 0%, #e2995f 100%);
-  }
-
-  .dark-gradient {
-    background: linear-gradient(
-      232deg,
-      rgba(23, 28, 35, 0.41) 0%,
-      rgba(19, 22, 28, 0.7) 100%
-    );
-  }
-
-  .tab {
-    @apply min-h-full dark:bg-dark-400 bg-light-800 text-light-500 dark:data-[state=active]:bg-dark-300 data-[state=active]:bg-primary-100 data-[state=active]:text-primary-500 !important;
+    @apply flex items-center justify-start;
   }
 }
 
@@ -73,13 +99,6 @@ body {
     rgba(247, 249, 255, 0.5) 0%,
     rgba(229, 237, 255, 0.25) 100%
   );
-}
-
-.primary-text-gradient {
-  background: linear-gradient(129deg, #ff7000 0%, #e2995f 100%);
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
 }
 
 .custom-scrollbar::-webkit-scrollbar {
@@ -125,7 +144,6 @@ code {
   hyphens: auto;
 
   padding: 2px;
-  color: #ff7000 !important;
 }
 
 .markdown pre {

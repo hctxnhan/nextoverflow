@@ -1,63 +1,86 @@
-import type { Config } from "tailwindcss";
-import TwTypography from "@tailwindcss/typography";
-const config: Config = {
-  content: [
-    "./components/**/*.{js,ts,jsx,tsx,mdx}",
-    "./app/**/*.{js,ts,jsx,tsx,mdx}",
-  ],
+/** @type {import('tailwindcss').Config} */
+module.exports = {
+  darkMode: ["class"],
+  content: ["./components/**/*.{ts,tsx}", "./app/**/*.{ts,tsx}"],
   theme: {
     container: {
       center: true,
       padding: "2rem",
       screens: {
-        "2xl": "1440px",
+        "2xl": "1400px",
       },
     },
     extend: {
       colors: {
+        border: "hsl(var(--border))",
+        input: "hsl(var(--input))",
+        ring: "hsl(var(--ring))",
+        background: {
+          DEFAULT: "hsl(var(--background))",
+          lighter: "hsl(var(--background-lighter))",
+          darker: "hsl(var(--background-darker))",
+        },
+        foreground: {
+          DEFAULT: "hsl(var(--foreground))",
+          lighter: "hsl(var(--foreground-lighter))",
+          light: "hsl(var(--foreground-light))",
+          darker: "hsl(var(--foreground-darker))",
+          dark: "hsl(var(--foreground-dark))",
+        },
+        shadow: "hsl(var(--shadow))",
         primary: {
-          500: "#FF7000",
-          100: "#FFF1E6",
+          DEFAULT: "hsl(var(--primary))",
+          foreground: "hsl(var(--primary-foreground))",
         },
-        dark: {
-          100: "#000000",
-          200: "#0F1117",
-          300: "#151821",
-          400: "#212734",
-          500: "#101012",
+        secondary: {
+          DEFAULT: "hsl(var(--secondary))",
+          foreground: "hsl(var(--secondary-foreground))",
         },
-        light: {
-          900: "#FFFFFF",
-          800: "#F4F6F8",
-          850: "#FDFDFD",
-          700: "#DCE3F1",
-          500: "#7B8EC8",
-          400: "#858EAD",
+        destructive: {
+          DEFAULT: "hsl(var(--destructive))",
+          foreground: "hsl(var(--destructive-foreground))",
         },
-        "accent-blue": "#1DA1F2",
+        muted: {
+          DEFAULT: "hsl(var(--muted))",
+          foreground: "hsl(var(--muted-foreground))",
+        },
+        accent: {
+          DEFAULT: "hsl(var(--accent))",
+          foreground: "hsl(var(--accent-foreground))",
+        },
+        popover: {
+          DEFAULT: "hsl(var(--popover))",
+          foreground: "hsl(var(--popover-foreground))",
+        },
+        card: {
+          DEFAULT: "hsl(var(--card))",
+          foreground: "hsl(var(--card-foreground))",
+        },
+      },
+      borderRadius: {
+        lg: "var(--radius)",
+        md: "calc(var(--radius) - 2px)",
+        sm: "calc(var(--radius) - 4px)",
       },
       fontFamily: {
-        inter: ["var(--font-inter)"],
-        spaceGrotesk: ["var(--font-spaceGrotesk)"],
+        body: ["var(--font-inter)"],
+        heading: ["var(--font-bebas-neue)"],
       },
-      boxShadow: {
-        "light-100":
-          "0px 12px 20px 0px rgba(184, 184, 184, 0.03), 0px 6px 12px 0px rgba(184, 184, 184, 0.02), 0px 2px 4px 0px rgba(184, 184, 184, 0.03)",
-        "light-200": "10px 10px 20px 0px rgba(218, 213, 213, 0.10)",
-        "light-300": "-10px 10px 20px 0px rgba(218, 213, 213, 0.10)",
-        "dark-100": "0px 2px 10px 0px rgba(46, 52, 56, 0.10)",
-        "dark-200": "2px 0px 20px 0px rgba(39, 36, 36, 0.04)",
+      keyframes: {
+        "accordion-down": {
+          from: { height: 0 },
+          to: { height: "var(--radix-accordion-content-height)" },
+        },
+        "accordion-up": {
+          from: { height: "var(--radix-accordion-content-height)" },
+          to: { height: 0 },
+        },
       },
-      backgroundImage: {
-        "auth-dark": "url('/assets/images/auth-dark.png')",
-        "auth-light": "url('/assets/images/auth-light.png')",
-      },
-      screens: {
-        xs: "420px",
+      animation: {
+        "accordion-down": "accordion-down 0.2s ease-out",
+        "accordion-up": "accordion-up 0.2s ease-out",
       },
     },
   },
-  plugins: [TwTypography],
+  plugins: [require("tailwindcss-animate")],
 };
-
-export default config;
