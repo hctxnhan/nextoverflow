@@ -7,6 +7,7 @@ import SuitcaseSvg from "@/public/assets/icons/suitcase.svg";
 import TagSvg from "@/public/assets/icons/tag.svg";
 import UserSvg from "@/public/assets/icons/user.svg";
 import QuestionSvg from "@/public/assets/icons/question.svg";
+import { NoResultProps } from "@/components/shared/no-result/NoResult";
 
 export const THEMES = [
   {
@@ -66,3 +67,19 @@ export const SIDE_NAV_ITEMS: SidebarLink[] = [
     label: "Ask a question",
   },
 ];
+
+export const HOME_FILTER_OPTIONS = [
+  { label: "Newest", value: "newest" },
+  { label: "Recommended", value: "recommended" },
+  { label: "Frequent", value: "frequent" },
+  { label: "Unanswered", value: "unanswered" },
+];
+
+export const NO_RESULT_PROPS: Record<string, NoResultProps> = {
+  home: {
+    title: "There are no question to show",
+    description: "Be the first to break the silence! 🚀 Ask a Question and kickstart the discussion. our query could be the next big thing others learn from. Get involved! 💡",
+    actionHref: "/ask-question",
+    actionText: "Ask a question",
+  }
+}

@@ -35,7 +35,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           className={cn(
             inter.variable,
             spaceGrotesk.variable,
-            "font-inter bg-background text-foreground",
+            "font-inter bg-background-lighter text-foreground",
           )}
         >
           <ThemeProvider

@@ -7,7 +7,7 @@ import SignUpSvg from "@/public/assets/icons/sign-up.svg";
 
 export function LeftSidebar() {
   return (
-    <div className="sticky left-0 top-0 flex h-screen flex-col bg-background-darker p-4 pt-24 max-sm:hidden lg:w-[250px]">
+    <div className="sticky left-0 top-0 flex h-screen flex-col p-4 pt-24 max-sm:hidden lg:w-[250px]">
       <SidebarLink />
 
       <SignedOut>
