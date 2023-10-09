@@ -1,5 +1,6 @@
 import { LeftSidebar } from "@/components/shared/left-sidebar/LeftSidebar";
 import { Navbar } from "@/components/shared/navbar/Navbar";
+import { RightSidebar } from "@/components/shared/right-sidebar/RightSidebar";
 import { ReactNode } from "react";
 
 interface Props {
@@ -13,12 +14,12 @@ export default function Layout({ children }: Props) {
       <div className="flex">
         <LeftSidebar />
 
-        <main className="min-h-screen">
+        <main className="min-h-screen flex-1">
           Main content
           {children}
         </main>
 
-        <div>Right sidebar</div>
+        <RightSidebar />
       </div>
     </div>
   );
