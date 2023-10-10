@@ -11,7 +11,9 @@ export function SidebarLink() {
   return (
     <section className="flex flex-col gap-4">
       {SIDE_NAV_ITEMS.map((item) => {
-        const active = pathname.startsWith(item.route);
+        const active =
+          (pathname.startsWith(item.route) && item.route !== "/") ||
+          pathname === item.route;
 
         return (
           <Link

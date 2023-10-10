@@ -2,15 +2,18 @@ import { ClerkProvider } from "@clerk/nextjs";
 import "./globals.css";
 import type { Metadata } from "next";
 // eslint-disable-next-line camelcase
-import { Inter, Space_Grotesk } from "next/font/google";
+import { Rubik, Bebas_Neue } from "next/font/google";
 import { ReactNode } from "react";
 import { ThemeProvider } from "@/context/ThemeProvider";
 import { cn } from "@/lib/utils";
+import { clerkStyleConfig } from "@/lib/clerkStyleConfig";
 
-const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
-const spaceGrotesk = Space_Grotesk({
+const body = Rubik({ subsets: ["latin"], variable: "--font-body" });
+
+const heading = Bebas_Neue({
   subsets: ["latin"],
-  variable: "--font-space-grotesk",
+  variable: "--font-heading",
+  weight: "400",
 });
 
 export const metadata: Metadata = {
@@ -20,24 +23,13 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <ClerkProvider
-        appearance={{
-          elements: {
-            formButtonPrimary: "primary-gradient",
-            footerActionLink: "primary-text-gradient hover:text-primary-500",
-            headerTitle: "text-primary-500 h2-bold",
-            card: "shadow-2xl shadow-slate-200 rounded-xl",
-          },
-        }}
-      >
-        <body
-          className={cn(
-            inter.variable,
-            spaceGrotesk.variable,
-            "font-inter bg-background-lighter text-foreground",
-          )}
-        >
+    <html
+      className={cn(body.variable, heading.variable, "font-body")}
+      lang="en"
+      suppressHydrationWarning
+    >
+      <ClerkProvider appearance={clerkStyleConfig}>
+        <body className={cn("text-foreground")}>
           <ThemeProvider
             defaultTheme="system"
             attribute="class"

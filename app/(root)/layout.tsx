@@ -9,7 +9,7 @@ interface Props {
 
 export default function Layout({ children }: Props) {
   return (
-    <div className="relative">
+    <div className="relative bg-background-lighter">
       <Navbar />
       <div className="flex">
         <LeftSidebar />

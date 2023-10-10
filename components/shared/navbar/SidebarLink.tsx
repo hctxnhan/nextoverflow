@@ -12,7 +12,9 @@ export function SidebarLink() {
   return (
     <section className="flex flex-col gap-4">
       {SIDE_NAV_ITEMS.map((item) => {
-        const active = pathname.startsWith(item.route);
+        const active =
+          (pathname.startsWith(item.route) && item.route !== "/") ||
+          pathname === item.route;
 
         return (
           <SheetClose asChild key={item.label}>
@@ -24,7 +26,7 @@ export function SidebarLink() {
             >
               <item.Icon
                 className={cn("fill-primary", {
-                  "text-primary-foreground fill-primary-foreground": active,
+                  "fill-primary-foreground text-primary-foreground": active,
                 })}
               />
               <span>{item.label}</span>

@@ -3,6 +3,7 @@
 @tailwind utilities;
 
 @import url("../styles/theme.css");
+@import url("../styles/clerk.css");
 
 @layer base {
   :root {
@@ -30,8 +31,8 @@
 
     /* Custom color */
     --background-darker: 146 13% 89%;
-    --background-lighter: 146 37% 96%;
-
+    --background-lighter: 146 40% 96%;
+    --background-light: 144 29% 97%;
     --foreground-darker: 138 43% 9%;
     --foreground-dark: 141 47% 6%;
     --foreground-lighter: 137 22% 19%;
@@ -62,6 +63,7 @@
     /* Custom color */
     --background-darker: 144 29% 3%;
     --background-lighter: 150 9% 14%;
+    --background-light: 144 4% 23%;
 
     --foreground-darker: 140 22% 81%;
     --foreground-dark: 137 6% 54%;
@@ -82,6 +84,22 @@
   .flex-start {
     @apply flex items-center justify-start;
   }
+}
+
+#question-editor.wmde-markdown,
+#question-editor.wmde-markdown-var,
+#question-editor.wmde-markdown-var[data-color-mode*="light"],
+#question-editor.wmde-markdown{
+  --color-fg-default: hsl(var(--foreground));
+  --color-accent-fg: hsl(var(--accent));
+  --color-danger-fg: hsl(var(--destructive));
+  --color-prettylights-syntax-constant: hsl(var(--accent));
+  --md-editor-background-color: hsl(var(--background-lighter));
+  --color-canvas-default: hsl(var(--background-lighter));
+}
+
+#question-editor .wmde-markdown {
+  background-color: hsl(var(--background-lighter));
 }
 
 .no-focus {
@@ -159,11 +177,6 @@ code {
   color: inherit !important;
 }
 /* Markdown End */
-
-/* Clerk */
-.cl-internal-b3fm6y {
-  background: linear-gradient(129deg, #ff7000 0%, #e2995f 100%) !important;
-}
 
 .hash-span {
   margin-top: -140px;

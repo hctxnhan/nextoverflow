@@ -1,0 +1,84 @@
+/* Clerk */
+.cl-internal-b3fm6y {
+  background: linear-gradient(129deg, #ff7000 0%, #e2995f 100%) !important;
+  display: none;
+}
+
+.cl-internal-9njem3 {
+  display: none;
+}
+
+[class*="cl-internal-"] {
+  --accent: hsl(var(--primary));
+  --accentDarker: hsla(var(--primary) / 0.8);
+  --accentDark: hsla(var(--primary) / 0.8);
+  --accentLighter: hsla(var(--primary) / 0.8);
+  --accentLightest: hsla(var(--primary) / 0.8);
+}
+
+.cl-internal-16pk7q8 p {
+  color: hsl(var(--foreground-darker)) !important;
+}
+
+.cl-internal-n3kcow path {
+  color: hsl(var(--foreground-darker)) !important;
+}
+
+.cl-accordionTriggerButton {
+  color: hsl(var(--foreground-darker)) !important;
+}
+
+.cl-rootBox button:focus {
+  box-shadow: hsl(var(--primary)) 0px 0px 0px 3px;
+}
+
+.cl-rootBox button:active,
+.cl-rootBox button:hover {
+  color: hsl(var(--background)) !important;
+}
+
+.cl-rootBox {
+  color: hsl(var(--foreground)) !important;
+}
+
+.cl-profileSectionContent p {
+  color: hsl(var(--foreground-dark)) !important;
+}
+
+.cl-profileSectionContent p:first-child {
+  color: hsl(var(--foreground)) !important;
+}
+
+.cl-profileSectionContent__danger button {
+  background: hsl(var(--destructive)) !important;
+}
+
+.cl-profileSectionContent__danger button:hover {
+  background: hsl(var(--destructive) / 0.8) !important;
+  color: white !important;
+}
+
+.cl-form p {
+  color: hsl(var(--foreground)) !important;
+}
+
+.cl-internal-ky4qfy {
+  color: hsl(var(--foreground-darker));
+}
+
+.cl-userButtonPopoverActionButtonIconBox * {
+  color: hsl(var(--foreground-darker)) !important;
+}
+
+.cl-userButtonPopoverActionButton:hover * {
+  color: hsl(var(--background)) !important;
+}
+
+.cl-userButtonPopoverCard {
+  background: hsl(var(--background-light)) !important;
+  @apply overflow-hidden pb-0 pt-4;
+}
+
+.cl-headerSubtitle {
+  color: hsl(var(--foreground-darker)) !important;
+}
