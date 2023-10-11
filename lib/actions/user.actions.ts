@@ -1,31 +1,100 @@
 "use server";
 
-import { currentUser } from "@clerk/nextjs";
 import { Prisma } from "@prisma/client";
 import { prisma } from "../prismaClient";
+import { revalidatePath } from "next/cache";
 
-export async function createUser(params: { username: string }) {
-  const authUser = await currentUser();
+interface UserOperationParams {
+  username: string;
+  clerkId: string;
+  email: string;
+  firstName: string;
+  lastName: string;
+  picture: string;
+}
 
-  if (!authUser) {
-    throw new Error("Current user is not logged in");
-  }
-
-  const existingUser = await prisma.user.findUnique({
-    where: { clerkId: authUser.id },
+export async function getUserById({
+  clerkId,
+}: Pick<UserOperationParams, "clerkId">) {
+  const user = await prisma.user.findUnique({
+    where: { clerkId },
+    select: {
+      username: true,
+      name: true,
+      picture: true,
+      email: true,
+      joinedAt: true,
+    },
   });
+
+  return user;
+}
+
+export async function createUser({
+  clerkId,
+  email,
+  firstName,
+  lastName,
+  picture,
+  username,
+}: UserOperationParams) {
+  const existingUser = await getUserById({ clerkId });
 
   if (existingUser) {
     throw new Error("User already exists");
   }
 
   const user: Prisma.UserCreateInput = {
-    clerkId: authUser.id,
-    email: authUser.emailAddresses[0].emailAddress,
-    name: `${authUser.firstName} ${authUser.lastName}`.trim(),
-    picture: authUser.imageUrl,
-    username: params.username,
+    clerkId,
+    email,
+    name: `${firstName} ${lastName}`.trim(),
+    picture,
+    username,
   };
 
-  await prisma.user.create({ data: user });
+  const result = await prisma.user.create({ data: user });
+
+  return result;
+}
+
+export async function updateUser({
+  clerkId,
+  data,
+}: {
+  clerkId: string;
+  data: Partial<Omit<UserOperationParams, "clerkId">>;
+}) {
+  const user = await getUserById({ clerkId });
+
+  if (!user) {
+    throw new Error("User not found");
+  }
+
+  const updatedUser = await prisma.user.update({
+    where: { clerkId },
+    data: {
+      ...user,
+      ...data,
+    },
+  });
+
+  revalidatePath(`/profile/${user.username}`);
+
+  return updatedUser;
+}
+
+export async function deleteUser({
+  clerkId,
+}: Pick<UserOperationParams, "clerkId">) {
+  const user = await getUserById({ clerkId });
+
+  if (!user) {
+    throw new Error("User not found");
+  }
+
+  await prisma.user.delete({ where: { clerkId } });
+
+  revalidatePath(`/profile/${user.username}`);
+
+  return user;
 }
