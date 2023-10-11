@@ -3,6 +3,7 @@
 import { Prisma } from "@prisma/client";
 import { prisma } from "../prismaClient";
 import { revalidatePath } from "next/cache";
+import { PaginationParams, SortOrder } from "@/types";
 
 interface UserOperationParams {
   username: string;
@@ -97,4 +98,31 @@ export async function deleteUser({
   revalidatePath(`/profile/${user.username}`);
 
   return user;
+}
+
+export async function getAllUsers(
+  params: {
+    sortBy: "joinedAt" | "name" | "contributions";
+    sortOrder: SortOrder;
+  } & PaginationParams,
+) {
+  const users = await prisma.user.findMany({
+    orderBy: {
+      [params.sortBy]: params.sortOrder,
+    },
+    select: {
+      username: true,
+      name: true,
+      picture: true,
+      email: true,
+      joinedAt: true,
+    },
+    where: {
+      username: params.search ? { contains: params.search } : undefined,
+    },
+    skip: (params.page - 1) * params.limit,
+    take: params.limit,
+  });
+
+  return users;
 }

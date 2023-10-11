@@ -19,12 +19,15 @@ interface FilterProps {
 export function Filter({
   options,
   className,
-  filterPlaceholder = "Select one...",
+  filterPlaceholder = "Select a Filter",
 }: FilterProps) {
   return (
     <Select>
       <SelectTrigger
-        className={cn("h-full border-none bg-background-lighter", className)}
+        className={cn(
+          "h-full w-fit border-none bg-background-lighter",
+          className,
+        )}
       >
         <SelectValue className="h-full" placeholder={filterPlaceholder} />
       </SelectTrigger>

@@ -68,18 +68,49 @@ export const SIDE_NAV_ITEMS: SidebarLink[] = [
   },
 ];
 
-export const HOME_FILTER_OPTIONS = [
-  { label: "Newest", value: "newest" },
-  { label: "Recommended", value: "recommended" },
-  { label: "Frequent", value: "frequent" },
-  { label: "Unanswered", value: "unanswered" },
-];
+export const LOCAL_SEARCH_FILTER_OPTIONS = {
+  home: [
+    { label: "Newest", value: "newest" },
+    { label: "Recommended", value: "recommended" },
+    { label: "Frequent", value: "frequent" },
+    { label: "Unanswered", value: "unanswered" },
+  ],
+  community: [
+    {
+      label: "New Users",
+      value: "new-users",
+    },
+    {
+      label: "Old Users",
+      value: "old-users",
+    },
+    {
+      label: "Top Contributors",
+      value: "top-contributors",
+    },
+  ],
+  tags: [
+    {
+      label: "Popular",
+      value: "popular",
+    },
+    {
+      label: "Recent",
+      value: "recent",
+    },
+    {
+      label: "Oldest",
+      value: "oldest",
+    },
+  ],
+};
 
 export const NO_RESULT_PROPS: Record<string, NoResultProps> = {
   home: {
     title: "There are no question to show",
-    description: "Be the first to break the silence! 🚀 Ask a Question and kickstart the discussion. our query could be the next big thing others learn from. Get involved! 💡",
+    description:
+      "Be the first to break the silence! 🚀 Ask a Question and kickstart the discussion. our query could be the next big thing others learn from. Get involved! 💡",
     actionHref: "/ask-question",
     actionText: "Ask a question",
-  }
-}
+  },
+};

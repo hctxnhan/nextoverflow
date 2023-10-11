@@ -31,6 +31,16 @@ const nextConfig = {
     serverActions: true,
     mdxRs: true,
   },
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        port: "",
+        hostname: "img.clerk.com",
+        pathname: "/*",
+      },
+    ],
+  },
 };
 
 module.exports = nextConfig;
