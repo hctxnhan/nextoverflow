@@ -29,6 +29,7 @@ model Question {
   authorId  String
   upvotes   Int      @default(0)
   downvotes Int      @default(0)
+  answers   Answer[]
 }
 
 model User {
@@ -42,5 +43,19 @@ model User {
   reputation Int      @default(0)
   joinedAt  DateTime @default(now())
   questions Question[]
+  answers   Answer[]
   followedTags Tag[]
+}
+
+model Answer {
+  id        Int      @id @default(autoincrement())
+  content      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  author    User     @relation(fields: [authorId], references: [clerkId])
+  authorId  String
+  upvotes   Int      @default(0)
+  downvotes Int      @default(0)
+  question  Question @relation(fields: [questionId], references: [id])
+  questionId Int
 }

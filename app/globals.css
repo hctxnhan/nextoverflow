@@ -41,7 +41,7 @@
 
   :root[class~="dark"] {
     --background: 146 33% 4%;
-    --foreground: 138 45% 90%;
+    --foreground: 150 14% 97%;
     --card: 146 33% 4%;
     --card-foreground: 138 45% 90%;
     --popover: 146 33% 4%;
@@ -65,10 +65,10 @@
     --background-lighter: 150 9% 14%;
     --background-light: 144 4% 23%;
 
-    --foreground-darker: 140 22% 81%;
-    --foreground-dark: 137 6% 54%;
-    --foreground-lighter: 139 46% 92%;
-    --foreground-light: 137 47% 94%;
+    --foreground-darker: 150 3% 87%;
+    --foreground-dark: 120 0% 58%;
+    --foreground-lighter: 150 14% 97%;
+    --foreground-light: 120 9% 98%;
   }
 }
 
@@ -90,10 +90,10 @@
   }
 }
 
-#question-editor.wmde-markdown,
-#question-editor.wmde-markdown-var,
-#question-editor.wmde-markdown-var[data-color-mode*="light"],
-#question-editor.wmde-markdown {
+#markdown-editor.wmde-markdown,
+#markdown-editor.wmde-markdown-var,
+#markdown-editor.wmde-markdown-var[data-color-mode*="light"],
+#markdown-editor.wmde-markdown {
   --color-fg-default: hsl(var(--foreground));
   --color-accent-fg: hsl(var(--accent));
   --color-danger-fg: hsl(var(--destructive));
@@ -102,7 +102,7 @@
   --color-canvas-default: hsl(var(--background-lighter));
 }
 
-#question-editor .wmde-markdown {
+#markdown-editor .wmde-markdown {
   background-color: hsl(var(--background-lighter));
 }
 

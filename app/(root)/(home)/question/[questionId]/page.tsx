@@ -1,6 +1,9 @@
 import { NoResult } from "@/components/shared/no-result/NoResult";
 import { getQuestionById } from "@/lib/actions/question.actions";
 import { QuestionDetail } from "./components/QuestionDetail";
+import { AnswerForm } from "./components/AnswerForm";
+import { AnswerList, preload } from "./components/AnswerList";
+import { SignedIn } from "@clerk/nextjs";
 
 const NoQuestionFound = () => (
   <NoResult
@@ -24,9 +27,19 @@ export default async function Page({
 
   if (!questionDetails) return <NoQuestionFound />;
 
+  preload(questionIdNumber);
+
   return (
-    <div className="mb-8 rounded-md bg-background-lighter p-8">
-      <QuestionDetail question={questionDetails} />
-    </div>
+    <>
+      <div className="mb-8 rounded-md bg-background-lighter p-8">
+        <QuestionDetail question={questionDetails} />
+      </div>
+      <div className="mb-8 rounded-md bg-background-lighter p-8">
+        <SignedIn>
+          <AnswerForm questionId={questionIdNumber} />
+        </SignedIn>
+        <AnswerList questionId={questionIdNumber} />
+      </div>
+    </>
   );
 }

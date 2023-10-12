@@ -103,6 +103,24 @@ export const LOCAL_SEARCH_FILTER_OPTIONS = {
       value: "oldest",
     },
   ],
+  answers: [
+    {
+      label: "Most Upvotes",
+      value: "most-upvotes",
+    },
+    {
+      label: "Most Downvotes",
+      value: "most-downvotes",
+    },
+    {
+      label: "Most Recent",
+      value: "most-recent",
+    },
+    {
+      label: "Oldest",
+      value: "oldest",
+    },
+  ],
 };
 
 export const NO_RESULT_PROPS: Record<string, NoResultProps> = {

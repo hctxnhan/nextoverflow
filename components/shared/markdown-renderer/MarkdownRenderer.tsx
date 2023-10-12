@@ -13,7 +13,7 @@ export function MarkdownRenderer({
   return (
     <div
       className={cn(
-        "prose prose-neutral dark:prose-invert lg:prose-lg",
+        "prose prose-neutral dark:prose-invert",
         className,
       )}
     >

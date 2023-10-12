@@ -21,8 +21,8 @@ export function QuestionCard({
             <Tag key={tag.name}>{tag.name}</Tag>
           ))}
         </div>
-        <div className="flex-between mt-6 gap-1 max-md:flex-col max-md:items-start">
-          <div className="small-regular flex items-center gap-1 max-md:order-1">
+        <div className="flex-between mt-6 gap-1 text-foreground-dark max-md:flex-col max-md:items-start">
+          <div className="small-regular flex items-center gap-1  max-md:order-1">
             <Image
               src={author.picture ?? "/assets/images/default-logo.svg"}
               width={20}
