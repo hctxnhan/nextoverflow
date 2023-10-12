@@ -2,6 +2,7 @@ import "@uiw/react-md-editor/markdown-editor.css";
 import "@uiw/react-markdown-preview/markdown.css";
 import dynamic from "next/dynamic";
 import { useTheme } from "next-themes";
+import rehypeSanitize from "rehype-sanitize";
 
 const MDEditor = dynamic(() => import("@uiw/react-md-editor"), { ssr: false });
 
@@ -16,10 +17,12 @@ export function QuestionEditor({ value, onChange }: QuestionEditorProps) {
     <div>
       <MDEditor
         id="question-editor"
+        previewOptions={{
+          rehypePlugins: [[rehypeSanitize]],
+        }}
         data-color-mode={theme as "light" | "dark" | undefined}
         value={value}
         onChange={onChange}
-        className="whitespace-pre-wrap"
       />
     </div>
   );

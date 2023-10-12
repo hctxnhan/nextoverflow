@@ -82,9 +82,27 @@ const config: Config = {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
       },
+      typography: (theme) => ({
+        DEFAULT: {
+          css: {
+            h2: {
+              fontWeight: theme("fontWeight.medium"),
+              marginTop: theme("spacing.10"),
+              marginBottom: theme("spacing.3"),
+            },
+            h1: {
+              marginBottom: theme("spacing.3"),
+            },
+            hr: {
+              marginTop: theme("spacing.4"),
+              marginBottom: theme("spacing.4"),
+            }
+          },
+        },
+      }),
     },
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [require("tailwindcss-animate"), require("@tailwindcss/typography")],
 };
 
 export default config;

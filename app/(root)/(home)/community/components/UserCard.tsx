@@ -8,7 +8,7 @@ interface UserCardProps {
 
 export function UserCard({ username, name, imageUrl }: UserCardProps) {
   return (
-    <div className="flex-center flex-col rounded-xl bg-background-light p-6 shadow-shadow hover:shadow-xl">
+    <div className="flex-center shadow-on-hover flex-col rounded-xl bg-background-light p-6">
       <Image
         src={imageUrl ?? "/assets/images/default-logo.svg"}
         width={100}

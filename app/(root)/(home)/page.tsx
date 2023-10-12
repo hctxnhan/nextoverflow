@@ -27,7 +27,7 @@ export default async function Home() {
       <HomeFilter />
 
       {questions.length > 0 ? (
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-8">
           {questions.map((question) => (
             <QuestionCard key={question.id} question={question} />
           ))}

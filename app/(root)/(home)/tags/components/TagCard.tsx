@@ -10,8 +10,8 @@ export function TagCard({ tag }: TagCardProps) {
   return (
     <Link href={`/tags/${tag.name}`}>
       <div
-        className="flex flex-col gap-3 rounded-md 
-      bg-background-light p-4 shadow-shadow hover:shadow-xl"
+        className="shadow-on-hover flex flex-col gap-3 
+      rounded-md bg-background-light p-4"
       >
         <Tag className="px-3 py-2">
           <span className="base-medium w-full text-center text-foreground-lighter">

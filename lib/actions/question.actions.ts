@@ -8,6 +8,9 @@ import { PaginationParams } from "@/types";
 import { revalidatePath } from "next/cache";
 
 export type QuestionInHomepage = Awaited<ReturnType<typeof getQuestions>>[0];
+export type QuestionInDetail = NonNullable<
+  Awaited<ReturnType<typeof getQuestionById>>
+>;
 
 export async function getQuestions({
   limit = 10,
@@ -69,4 +72,13 @@ export async function createQuestion(params: {
 
   revalidatePath(`/`);
   redirect(`/`);
+}
+
+export async function getQuestionById(id: number) {
+  const question = await prisma.question.findUnique({
+    where: { id },
+    include: { author: true, tags: true },
+  });
+
+  return question;
 }

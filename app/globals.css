@@ -84,12 +84,16 @@
   .flex-start {
     @apply flex items-center justify-start;
   }
+
+  .shadow-on-hover {
+    @apply hover:shadow-2xl shadow-shadow transition-shadow;
+  }
 }
 
 #question-editor.wmde-markdown,
 #question-editor.wmde-markdown-var,
 #question-editor.wmde-markdown-var[data-color-mode*="light"],
-#question-editor.wmde-markdown{
+#question-editor.wmde-markdown {
   --color-fg-default: hsl(var(--foreground));
   --color-accent-fg: hsl(var(--accent));
   --color-danger-fg: hsl(var(--destructive));
@@ -111,14 +115,6 @@
     brightness(104%) contrast(106%) !important;
 }
 
-.light-gradient {
-  background: linear-gradient(
-    132deg,
-    rgba(247, 249, 255, 0.5) 0%,
-    rgba(229, 237, 255, 0.25) 100%
-  );
-}
-
 .custom-scrollbar::-webkit-scrollbar {
   width: 3px;
   height: 3px;
@@ -137,46 +133,6 @@
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
   background: #555;
 }
-
-/* Markdown Start */
-.markdown a {
-  color: #1da1f2;
-}
-
-.markdown a,
-code {
-  /* These are technically the same, but use both */
-  overflow-wrap: break-word;
-  word-wrap: break-word;
-
-  -ms-word-break: break-all;
-  /* This is the dangerous one in WebKit, as it breaks things wherever */
-  word-break: break-all;
-  /* Instead use this non-standard one: */
-  word-break: break-word;
-
-  /* Adds a hyphen where the word breaks, if supported (No Blink) */
-  -ms-hyphens: auto;
-  -moz-hyphens: auto;
-  -webkit-hyphens: auto;
-  hyphens: auto;
-
-  padding: 2px;
-}
-
-.markdown pre {
-  display: grid;
-  width: 100%;
-}
-
-.markdown pre code {
-  width: 100%;
-  display: block;
-  overflow-x: auto;
-
-  color: inherit !important;
-}
-/* Markdown End */
 
 .hash-span {
   margin-top: -140px;
