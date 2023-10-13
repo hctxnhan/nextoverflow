@@ -11,8 +11,7 @@ datasource db {
 }
 
 model Tag {
-  id        Int      @id @default(autoincrement())
-  name      String  @unique
+  name      String  @id
   description String?
   followers User[]
   questions Question[]

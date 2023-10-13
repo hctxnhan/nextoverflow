@@ -25,12 +25,12 @@ export default async function Page({
 
   return (
     <>
-      <div className="mb-8 rounded-md bg-background-lighter p-8">
+      <div className="mb-8 rounded-md bg-background p-8">
         <QuestionDetail questionId={questionIdNumber} />
       </div>
-      <div className="mb-8 rounded-md bg-background-lighter p-8">
+      <div className="rounded-md bg-background p-8">
         <SignedIn>
-          <AnswerForm questionId={questionIdNumber} />
+          <AnswerForm className="mb-8" questionId={questionIdNumber} />
         </SignedIn>
         <AnswerList questionId={questionIdNumber} />
       </div>

@@ -1,7 +1,7 @@
 import { Tag } from "@/components/shared/tag/Tag";
 import { QuestionInHomepage } from "@/lib/actions/question.actions";
 import { formatAndDivideNumber, getTimestamp } from "@/lib/utils";
-import { EyeIcon, MessageCircle, ThumbsUp } from "lucide-react";
+import { EyeIcon, MessageCircle } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -14,7 +14,7 @@ export function QuestionCard({
 }: QuestionCardProps) {
   return (
     <Link href={`/question/${id}`}>
-      <div className="flex flex-col rounded-md bg-background-lighter px-6 py-4 shadow-shadow transition-shadow hover:shadow-2xl">
+      <div className="flex flex-col rounded-md bg-background px-6 py-4 shadow-shadow transition-shadow hover:shadow-2xl">
         <h3 className="h3-bold line-clamp-1">{title}</h3>
         <div className="mt-2 flex gap-2">
           {tags.map((tag) => (

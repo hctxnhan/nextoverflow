@@ -17,8 +17,15 @@ import { useUser } from "@clerk/nextjs";
 import z from "zod";
 import { Button } from "@/components/ui/button";
 import { createAnswer } from "@/lib/actions/answer.actions";
+import { cn } from "@/lib/utils";
 
-export function AnswerForm({ questionId }: { questionId: number }) {
+export function AnswerForm({
+  questionId,
+  className,
+}: {
+  questionId: number;
+  className?: string;
+}) {
   const { user, isSignedIn } = useUser();
 
   const form = useForm<z.infer<typeof AnswerFormSchema>>({
@@ -37,13 +44,13 @@ export function AnswerForm({ questionId }: { questionId: number }) {
     form.reset();
   }
 
-  if(!isSignedIn) return null
+  if (!isSignedIn) return null;
 
   return (
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="flex flex-col gap-4"
+        className={cn("flex flex-col gap-4", className)}
       >
         <FormField
           control={form.control}

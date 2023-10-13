@@ -9,12 +9,12 @@ interface Props {
 
 export default function Layout({ children }: Props) {
   return (
-    <div className="relative bg-background-lighter">
+    <div className="relative bg-background">
       <Navbar />
       <div className="flex">
         <LeftSidebar />
 
-        <main className="min-h-screen flex-1 bg-background-darker pt-24 max-md:pb-14 max-sm:px-4 sm:px-14">
+        <main className="min-h-screen flex-1 bg-background-darker pb-10 pt-24 max-sm:px-4 sm:px-14">
           <div className="mx-auto w-full max-w-5xl pt-4 max-sm:pt-0">
             {children}
           </div>

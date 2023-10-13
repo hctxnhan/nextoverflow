@@ -32,8 +32,8 @@ export async function getQuestions({
       _count: {
         select: {
           answers: true,
-        }
-      }
+        },
+      },
     },
     orderBy: { createdAt: "desc" },
     take: limit,
@@ -63,8 +63,8 @@ export async function getSavedQuestions({
           _count: {
             select: {
               answers: true,
-            }
-          }
+            },
+          },
         },
       },
     },
@@ -112,29 +112,29 @@ export async function createQuestion(params: {
 
 export async function getQuestionById(id: number) {
   const authUser = await currentUser();
-  if (!authUser) {
-    throw new Error("You must be logged in to create a question");
-  }
 
   const question = await prisma.question.findUnique({
-    where: { id },
+    where: {
+      id,
+    },
     include: {
       author: true,
       tags: true,
-      votes: {
+      votes: authUser ? {
         select: {
           userId: true,
           voteType: true,
         },
         where: {
-          userId: authUser.id,
+          userId: authUser?.id,
         },
-      },
+      } : undefined,
       _count: {
         select: {
+          // get saved by user if logged in
           savedBy: {
             where: {
-              userId: authUser.id,
+              userId: authUser?.id,
             },
           },
           answers: true,
@@ -185,4 +185,25 @@ async function unsaveQuestion(questionId: number, userId: string) {
 
   revalidatePath(`/question/${questionId}`);
   return result;
+}
+
+export async function getQuestionByTagId({ tagId }: { tagId: string }) {
+  return prisma.question.findMany({
+    where: {
+      tags: {
+        some: {
+          name: tagId,
+        },
+      },
+    },
+    include: {
+      author: true,
+      tags: true,
+      _count: {
+        select: {
+          answers: true,
+        },
+      },
+    },
+  });
 }

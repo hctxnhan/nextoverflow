@@ -19,7 +19,7 @@ export async function VoteForQuestion({ questionId }: VoteForQuestionProps) {
 
   if (!question) return null;
 
-  const currentUserVote = question.votes.length > 0 ? question.votes[0] : null;
+  const currentUserVote = question.votes?.length > 0 ? question.votes[0] : null;
 
   const handleUpvote = handleVoteQuestion.bind(null, {
     questionId: question.id,

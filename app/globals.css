@@ -7,7 +7,7 @@
 
 @layer base {
   :root {
-    --background: 146 33% 96%;
+    --background: 0 0% 100%;
     --foreground: 138 45% 10%;
     --card: 146 33% 96%;
     --card-foreground: 138 45% 10%;
@@ -30,9 +30,9 @@
     --shadow: 166 91% 9% / 20%;
 
     /* Custom color */
-    --background-darker: 146 13% 89%;
-    --background-lighter: 146 40% 96%;
-    --background-light: 144 29% 97%;
+    --background-darker: 144 9% 89%;
+    --background-lighter: 135 100% 99%;
+    --background-light: 150 100% 100%;
     --foreground-darker: 138 43% 9%;
     --foreground-dark: 141 47% 6%;
     --foreground-lighter: 137 22% 19%;
@@ -86,7 +86,7 @@
   }
 
   .shadow-on-hover {
-    @apply hover:shadow-2xl shadow-shadow transition-shadow;
+    @apply shadow-shadow transition-shadow hover:shadow-2xl;
   }
 }
 

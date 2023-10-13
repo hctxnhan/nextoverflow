@@ -181,4 +181,11 @@ export const NO_RESULT_PROPS: Record<string, NoResultProps> = {
     actionText: "Explore questions",
     actionHref: "/",
   },
+  tagDetail: {
+    title: "You're lost",
+    description:
+      "The tag you're looking for doesn't exist. Maybe the tag was deleted or the URL is incorrect. Please check the URL again or contact us if you think this is a mistake.",
+    actionText: "Go back home",
+    actionHref: "/",
+  },
 };
