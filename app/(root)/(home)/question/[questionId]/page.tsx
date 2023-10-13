@@ -1,12 +1,9 @@
-import { NoResult } from "@/components/shared/no-result/NoResult";
 import { getQuestionById } from "@/lib/actions/question.actions";
 import { SignedIn } from "@clerk/nextjs";
 import { AnswerForm } from "./components/AnswerForm";
 import { AnswerList, preload } from "./components/AnswerList";
 import { QuestionDetail } from "./components/QuestionDetail";
-import { NO_RESULT_PROPS } from "@/constants";
-
-const NoQuestionFound = () => <NoResult {...NO_RESULT_PROPS.questionDetail} />;
+import { NoQuestionFound } from "./components/NoQuestionFound";
 
 export default async function Page({
   params: { questionId },

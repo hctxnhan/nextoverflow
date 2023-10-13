@@ -1,3 +1,4 @@
+import { Button } from "@/components/ui/button";
 import { FormButton } from "@/components/ui/form-button";
 import { handleSaveQuestion } from "@/lib/actions/question.actions";
 import { cn } from "@/lib/utils";
@@ -20,16 +21,14 @@ export function SavedQuestionButton({
       action={handleSaveQuestion.bind(null, questionId)}
     >
       <FormButton>
-        <button
-          className={cn(
-            "h-fit bg-transparent p-0 text-input hover:bg-transparent hover:text-primary/80",
-            {
-              "text-primary hover:text-primary/80": hasSaved,
-            },
-          )}
+        <Button
+          variant={"customIcon"}
+          className={cn("flex-center w-full", {
+            "text-primary hover:text-primary/80": hasSaved,
+          })}
         >
-          <StarIcon size={24} />
-        </button>
+          {hasSaved ? "Saved" : "Save"} <StarIcon size={24} />
+        </Button>
       </FormButton>
     </form>
   );

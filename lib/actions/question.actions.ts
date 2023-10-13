@@ -2,7 +2,6 @@
 
 import { PaginationParams } from "@/types";
 import { currentUser } from "@clerk/nextjs";
-import { Prisma } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { prisma } from "../prismaClient";
@@ -83,27 +82,43 @@ export async function createQuestion(params: {
   title: string;
   body: string;
   tags: string[];
+  questionId?: number;
 }) {
   const authUser = await currentUser();
   if (!authUser) {
     throw new Error("You must be logged in to create a question");
   }
 
-  const question: Prisma.QuestionCreateInput = {
-    title: params.title,
-    author: { connect: { clerkId: authUser.id } },
-    content: params.body,
-    tags: {
-      connectOrCreate: params.tags.map((tag) => ({
-        where: { name: tag },
-        create: { name: tag },
-      })),
+  await prisma.question.upsert({
+    where: {
+      id: params.questionId ?? -1,
     },
-  };
-
-  await prisma.question.create({
-    data: question,
-    include: { author: true, tags: true },
+    update: {
+      title: params.title,
+      content: params.body,
+      tags: {
+        deleteMany: {},
+        connectOrCreate: params.tags.map((tag) => ({
+          where: { name: tag },
+          create: { name: tag },
+        })),
+      },
+    },
+    create: {
+      title: params.title,
+      content: params.body,
+      author: {
+        connect: {
+          clerkId: authUser.id,
+        },
+      },
+      tags: {
+        connectOrCreate: params.tags.map((tag) => ({
+          where: { name: tag },
+          create: { name: tag },
+        })),
+      },
+    },
   });
 
   revalidatePath(`/`);
@@ -120,15 +135,17 @@ export async function getQuestionById(id: number) {
     include: {
       author: true,
       tags: true,
-      votes: authUser ? {
-        select: {
-          userId: true,
-          voteType: true,
-        },
-        where: {
-          userId: authUser?.id,
-        },
-      } : undefined,
+      votes: authUser
+        ? {
+            select: {
+              userId: true,
+              voteType: true,
+            },
+            where: {
+              userId: authUser?.id,
+            },
+          }
+        : undefined,
       _count: {
         select: {
           // get saved by user if logged in
@@ -206,4 +223,32 @@ export async function getQuestionByTagId({ tagId }: { tagId: string }) {
       },
     },
   });
+}
+
+export async function isQuestionBelongToCurrentUser(questionId: number) {
+  const authUser = await currentUser();
+  if (!authUser) return false;
+
+  const question = await prisma.question.findFirst({
+    where: {
+      id: questionId,
+      authorId: authUser.id,
+    },
+  });
+
+  return !!question;
+}
+
+export async function deleteQuestion(questionId: number) {
+  const isOwner = await isQuestionBelongToCurrentUser(questionId);
+  if (!isOwner) throw new Error("You are not the owner of this question");
+
+  await prisma.question.delete({
+    where: {
+      id: questionId,
+    },
+  });
+
+  revalidatePath(`/`);
+  redirect(`/`);
 }

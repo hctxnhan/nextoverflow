@@ -22,14 +22,38 @@ import { XIcon } from "lucide-react";
 import { KeyboardEvent } from "react";
 import { useForm } from "react-hook-form";
 
-export function QuestionForm() {
+interface QuestionFormProps {
+  prefill?: QuestionFormType;
+  questionId?: number;
+}
+
+function getButtonLabel(editing: boolean, loading: boolean) {
+  const lable = {
+    create: {
+      default: "Post",
+      loading: "Posting...",
+    },
+    edit: {
+      default: "Save",
+      loading: "Saving...",
+    },
+  };
+
+  return lable[editing ? "edit" : "create"][loading ? "loading" : "default"];
+}
+
+export function QuestionForm({ prefill, questionId }: QuestionFormProps) {
+  const isEditing = !!questionId && !!prefill;
+
   const form = useForm<QuestionFormType>({
     resolver: zodResolver(QuestionFormSchema),
-    defaultValues: {
-      title: "",
-      explanation: "",
-      tags: [],
-    },
+    defaultValues: isEditing
+      ? prefill
+      : {
+          title: "",
+          explanation: "",
+          tags: [],
+        },
   });
 
   async function onSubmit(data: QuestionFormType) {
@@ -37,6 +61,7 @@ export function QuestionForm() {
       body: data.explanation,
       tags: data.tags,
       title: data.title,
+      questionId,
     });
   }
 
@@ -171,7 +196,7 @@ export function QuestionForm() {
           )}
         />
         <Button disabled={form.formState.isSubmitting} type="submit">
-          {form.formState.isSubmitting ? "Posting" : "Post"}
+          {getButtonLabel(isEditing, form.formState.isSubmitting)}
         </Button>
       </form>
     </Form>

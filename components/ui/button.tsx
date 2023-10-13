@@ -18,6 +18,8 @@ const buttonVariants = cva(
           "bg-secondary text-secondary-foreground hover:bg-secondary/80",
         ghost: "hover:bg-background-darker hover:text-foreground",
         link: "text-primary underline-offset-4 hover:underline",
+        customIcon:
+          "!h-fit bg-transparent flex !p-0 text-input hover:bg-transparent gap-2",
       },
       size: {
         default: "h-9 px-4 py-2",
@@ -26,6 +28,13 @@ const buttonVariants = cva(
         icon: "h-9 w-9",
       },
     },
+    compoundVariants: [
+      {
+        variant: "link",
+        size: "default",
+        class: "p-0 h-fit",
+      },
+    ],
     defaultVariants: {
       variant: "default",
       size: "default",

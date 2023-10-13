@@ -4,8 +4,8 @@ import { getQuestionById } from "@/lib/actions/question.actions";
 import { formatAndDivideNumber, getTimestamp } from "@/lib/utils";
 import { EyeIcon, MessageCircle } from "lucide-react";
 import Image from "next/image";
+import { QuestionActionMenu } from "./QuestionActionMenu";
 import { VoteForQuestion } from "./VoteForQuestion";
-import { SavedQuestionButton } from "./SavedQuestionButton";
 
 export async function QuestionDetail({ questionId }: { questionId: number }) {
   const question = await getQuestionById(questionId);
@@ -14,23 +14,24 @@ export async function QuestionDetail({ questionId }: { questionId: number }) {
 
   return (
     <div className="relative flex flex-col">
-      <SavedQuestionButton
-        className="absolute right-0 top-0 mr-4 mt-4"
-        hasSaved={question._count.savedBy > 0}
-        questionId={questionId}
-      />
-      <div className="body-regular mb-2 flex items-center text-foreground-light">
-        <Image
-          src={question.author.picture ?? "/assets/images/default-logo.svg"}
-          width={24}
-          height={24}
-          alt="avatar"
-          className="mr-2 rounded-full"
-        />
-        <p>
-          <span className="body-medium">{question.author.name}</span>
-          <span> asked {getTimestamp(question.createdAt)}</span>
-        </p>
+      <div className="flex-between">
+        <div className="body-regular mb-2 flex items-center text-foreground-light">
+          <Image
+            src={question.author.picture ?? "/assets/images/default-logo.svg"}
+            width={24}
+            height={24}
+            alt="avatar"
+            className="mr-2 rounded-full"
+          />
+          <p>
+            <span className="body-medium">{question.author.name}</span>
+            <span> asked {getTimestamp(question.createdAt)}</span>
+          </p>
+        </div>
+
+        <div className="flex items-center gap-2">
+          <QuestionActionMenu questionId={questionId} />
+        </div>
       </div>
 
       <div className="flex gap-2">
