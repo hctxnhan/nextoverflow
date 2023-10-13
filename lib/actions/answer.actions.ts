@@ -61,3 +61,29 @@ export async function getAnswerOfQuestion(questionId: number) {
 
   return answers;
 }
+
+export async function getAnswerById(id: number) {
+  const authUser = await currentUser();
+  if (!authUser) {
+    throw new Error("You must be logged in to vote");
+  }
+
+  const answer = await prisma.answer.findUnique({
+    where: {
+      id,
+    },
+    include: {
+      votes: {
+        select: {
+          userId: true,
+          voteType: true,
+        },
+        where: {
+          userId: authUser.id,
+        },
+      },
+    },
+  });
+
+  return answer;
+}

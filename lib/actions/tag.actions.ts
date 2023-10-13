@@ -1,3 +1,4 @@
+"use server";
 import { prisma } from "../prismaClient";
 
 export type TagInTagsPage = Awaited<ReturnType<typeof getAllTags>>[0];

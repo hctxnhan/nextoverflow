@@ -1,11 +1,11 @@
 "use server";
 
+import { PaginationParams } from "@/types";
 import { currentUser } from "@clerk/nextjs";
 import { Prisma } from "@prisma/client";
-import { prisma } from "../prismaClient";
-import { redirect } from "next/navigation";
-import { PaginationParams } from "@/types";
 import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
+import { prisma } from "../prismaClient";
 
 export type QuestionInHomepage = Awaited<ReturnType<typeof getQuestions>>[0];
 export type QuestionInDetail = NonNullable<
@@ -31,8 +31,6 @@ export async function getQuestions({
       author: { select: { username: true, picture: true, name: true } },
       tags: { select: { name: true } },
       title: true,
-      upvotes: true,
-      downvotes: true,
       createdAt: true,
     },
     orderBy: { createdAt: "desc" },
@@ -75,10 +73,77 @@ export async function createQuestion(params: {
 }
 
 export async function getQuestionById(id: number) {
+  const authUser = await currentUser();
+  if (!authUser) {
+    throw new Error("You must be logged in to create a question");
+  }
+
   const question = await prisma.question.findUnique({
     where: { id },
-    include: { author: true, tags: true },
+    include: {
+      author: true,
+      tags: true,
+      votes: {
+        select: {
+          userId: true,
+          voteType: true,
+        },
+        where: {
+          userId: authUser.id,
+        },
+      },
+      _count: {
+        select: {
+          savedBy: {
+            where: {
+              userId: authUser.id,
+            },
+          },
+        },
+      },
+    },
   });
 
   return question;
+}
+
+export async function handleSaveQuestion(questionId: number) {
+  const authUser = await currentUser();
+  if (!authUser) {
+    throw new Error("You must be logged in to create a question");
+  }
+
+  const hasSaved = await prisma.userSavedQuestion.findFirst({
+    where: {
+      questionId,
+      userId: authUser.id,
+    },
+  });
+
+  if (hasSaved) return unsaveQuestion(questionId, authUser.id);
+  else return saveQuestion(questionId, authUser.id);
+}
+
+async function saveQuestion(questionId: number, userId: string) {
+  const result = await prisma.userSavedQuestion.create({
+    data: {
+      questionId,
+      userId,
+    },
+  });
+
+  revalidatePath(`/question/${questionId}`);
+  return result;
+}
+
+async function unsaveQuestion(questionId: number, userId: string) {
+  const result = await prisma.userSavedQuestion.deleteMany({
+    where: {
+      questionId,
+      userId,
+    },
+  });
+
+  revalidatePath(`/question/${questionId}`);
+  return result;
 }

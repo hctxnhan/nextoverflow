@@ -10,7 +10,7 @@ interface QuestionCardProps {
 }
 
 export function QuestionCard({
-  question: { id, author, tags, title, upvotes, createdAt },
+  question: { id, author, tags, title, createdAt },
 }: QuestionCardProps) {
   return (
     <Link href={`/question/${id}`}>
@@ -37,7 +37,7 @@ export function QuestionCard({
           <div className="flex justify-end gap-3">
             <div className="flex-center small-regular gap-1">
               <ThumbsUp width={15} height={15} />
-              {formatAndDivideNumber(upvotes)} upvotes
+              {/* {formatAndDivideNumber(upvotes)} upvotes */}
             </div>
             <div className="flex-center small-regular gap-1">
               <EyeIcon width={15} height={15} />

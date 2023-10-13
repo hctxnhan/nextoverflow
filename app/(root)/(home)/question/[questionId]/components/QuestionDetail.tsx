@@ -1,18 +1,25 @@
 import { MarkdownRenderer } from "@/components/shared/markdown-renderer/MarkdownRenderer";
 import { Tag } from "@/components/shared/tag/Tag";
-import { QuestionInDetail } from "@/lib/actions/question.actions";
+import { getQuestionById } from "@/lib/actions/question.actions";
 import { formatAndDivideNumber, getTimestamp } from "@/lib/utils";
-import { EyeIcon, MessageCircle, ThumbsUp } from "lucide-react";
+import { EyeIcon, MessageCircle } from "lucide-react";
 import Image from "next/image";
+import { VoteForQuestion } from "./VoteForQuestion";
+import { SavedQuestionButton } from "./SavedQuestionButton";
 
-interface QuestionDetailProps {
-  question: QuestionInDetail;
-}
+export async function QuestionDetail({ questionId }: { questionId: number }) {
+  const question = await getQuestionById(questionId);
 
-export function QuestionDetail({ question }: QuestionDetailProps) {
+  if (!question) return null;
+
   return (
-    <div className="flex flex-col">
-      <div className="body-regular mb-2 flex items-center text-foreground-dark">
+    <div className="relative flex flex-col">
+      <SavedQuestionButton
+        className="absolute right-0 top-0 mr-4 mt-4"
+        hasSaved={question._count.savedBy > 0}
+        questionId={questionId}
+      />
+      <div className="body-regular mb-2 flex items-center text-foreground-light">
         <Image
           src={question.author.picture ?? "/assets/images/default-logo.svg"}
           width={24}
@@ -26,27 +33,28 @@ export function QuestionDetail({ question }: QuestionDetailProps) {
         </p>
       </div>
 
-      <div className="flex items-center gap-2"></div>
-      <h1 className="h1-bold text-black dark:text-white">{question.title}</h1>
-      <div className="mt-2 flex gap-2">
-        {question.tags.length > 0 &&
-          question.tags.map((tag) => (
-            <Tag
-              className="paragraph-regular bg-accent text-accent-foreground hover:bg-accent hover:text-accent-foreground"
-              key={tag.name}
-            >
-              {tag.name}
-            </Tag>
-          ))}
+      <div className="flex gap-2">
+        <VoteForQuestion questionId={questionId} />
+        <div>
+          <h1 className="h1-bold text-black dark:text-white">
+            {question.title}
+          </h1>
+          <div className="mt-2 flex gap-2">
+            {question.tags.length > 0 &&
+              question.tags.map((tag) => (
+                <Tag
+                  className="paragraph-regular bg-accent text-accent-foreground hover:bg-accent hover:text-accent-foreground"
+                  key={tag.name}
+                >
+                  {tag.name}
+                </Tag>
+              ))}
+          </div>
+        </div>
       </div>
-
       <MarkdownRenderer content={question.content} className="mt-10" />
 
-      <div className="mt-6 flex gap-10 text-foreground-light">
-        <div className="flex-center gap-2">
-          <ThumbsUp width={15} height={15} />
-          {formatAndDivideNumber(question.upvotes)} upvotes
-        </div>
+      <div className="body-regular mt-6 flex gap-10 text-foreground-light">
         <div className="flex-center gap-2">
           <EyeIcon width={15} height={15} />
           {formatAndDivideNumber(12)} views

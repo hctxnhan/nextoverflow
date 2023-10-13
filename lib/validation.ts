@@ -9,3 +9,9 @@ export const QuestionFormSchema = z.object({
 export const AnswerFormSchema = z.object({
   body: z.string().min(50),
 });
+
+export const VoteSchema = z.object({
+  voteType: z.enum(["UPVOTE", "DOWNVOTE"]),
+  questionId: z.number(),
+  answerId: z.number().optional(),
+});

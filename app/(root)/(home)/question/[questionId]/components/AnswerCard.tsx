@@ -2,6 +2,7 @@ import { MarkdownRenderer } from "@/components/shared/markdown-renderer/Markdown
 import { AnswerDetail } from "@/lib/actions/answer.actions";
 import { getTimestamp } from "@/lib/utils";
 import Image from "next/image";
+import { VoteForAnswer } from "./VoteForAnswer";
 
 interface AnswerCardProps {
   answer: AnswerDetail;
@@ -26,7 +27,12 @@ export async function AnswerCard({ answer }: AnswerCardProps) {
           </span>
         </p>
       </div>
-      <MarkdownRenderer className="prose-base" content={answer.content} />
+      <div className="flex gap-2">
+        <VoteForAnswer answerId={answer.id} />
+        <div className="flex-1 rounded-md bg-background-darker p-3">
+          <MarkdownRenderer className="prose-base" content={answer.content} />
+        </div>
+      </div>
     </div>
   );
 }
