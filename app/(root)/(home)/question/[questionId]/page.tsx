@@ -4,15 +4,9 @@ import { SignedIn } from "@clerk/nextjs";
 import { AnswerForm } from "./components/AnswerForm";
 import { AnswerList, preload } from "./components/AnswerList";
 import { QuestionDetail } from "./components/QuestionDetail";
+import { NO_RESULT_PROPS } from "@/constants";
 
-const NoQuestionFound = () => (
-  <NoResult
-    title="You're lost"
-    description="The question you're looking for doesn't exist. Maybe the question was deleted or the URL is incorrect. Please check the URL again or contact us if you think this is a mistake."
-    actionText="Go back home"
-    actionHref="/"
-  />
-);
+const NoQuestionFound = () => <NoResult {...NO_RESULT_PROPS.questionDetail} />;
 
 export default async function Page({
   params: { questionId },

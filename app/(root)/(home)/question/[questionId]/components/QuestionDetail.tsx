@@ -61,7 +61,7 @@ export async function QuestionDetail({ questionId }: { questionId: number }) {
         </div>
         <div className="flex-center gap-2">
           <MessageCircle width={15} height={15} />
-          {formatAndDivideNumber(12)} answers
+          {formatAndDivideNumber(question._count.answers)} answers
         </div>
       </div>
     </div>

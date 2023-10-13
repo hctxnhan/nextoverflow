@@ -1,7 +1,7 @@
 import { Filter } from "@/components/shared/filter/Filter";
 import { LocalSearchbar } from "@/components/shared/local-searchbar/LocalSearchbar";
 import { NoResult } from "@/components/shared/no-result/NoResult";
-import { LOCAL_SEARCH_FILTER_OPTIONS } from "@/constants";
+import { LOCAL_SEARCH_FILTER_OPTIONS, NO_RESULT_PROPS } from "@/constants";
 import { getAllUsers } from "@/lib/actions/user.actions";
 import { SortOrder } from "@/types";
 import { UserCard } from "./components/UserCard";
@@ -39,13 +39,7 @@ export default async function Page() {
             ))}
           </div>
         ) : (
-          <NoResult
-            className="mt-8"
-            actionHref="/sign-up"
-            actionText="Become a member"
-            title="No users found"
-            description="Join the community and start asking questions, answering questions, and interacting with other developers."
-          />
+          <NoResult className="mt-8" {...NO_RESULT_PROPS.community} />
         )}
       </section>
     </div>

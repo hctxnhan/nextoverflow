@@ -10,7 +10,7 @@ interface QuestionCardProps {
 }
 
 export function QuestionCard({
-  question: { id, author, tags, title, createdAt },
+  question: { id, author, tags, title, createdAt, _count },
 }: QuestionCardProps) {
   return (
     <Link href={`/question/${id}`}>
@@ -35,17 +35,17 @@ export function QuestionCard({
             <span>{getTimestamp(createdAt)}</span>
           </div>
           <div className="flex justify-end gap-3">
-            <div className="flex-center small-regular gap-1">
+            {/* <div className="flex-center small-regular gap-1">
               <ThumbsUp width={15} height={15} />
-              {/* {formatAndDivideNumber(upvotes)} upvotes */}
-            </div>
+              {formatAndDivideNumber(upvotes)} upvotes
+            </div> */}
             <div className="flex-center small-regular gap-1">
               <EyeIcon width={15} height={15} />
               {formatAndDivideNumber(12)} views
             </div>
             <div className="flex-center small-regular gap-1">
               <MessageCircle width={15} height={15} />
-              {formatAndDivideNumber(12)} answers
+              {formatAndDivideNumber(_count.answers)} answers
             </div>
           </div>
         </div>

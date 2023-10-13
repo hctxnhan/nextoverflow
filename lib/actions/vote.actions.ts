@@ -51,7 +51,7 @@ export async function handleVoteQuestion({
 
   const vote = await prisma.vote.findFirst({
     where: {
-      questionId,
+      questionId: answerId ? undefined : questionId,
       answerId,
       userId: authUser.id,
     },
@@ -84,7 +84,7 @@ export async function handleVoteQuestion({
     const newVote = await prisma.vote.create({
       data: {
         userId: authUser.id,
-        questionId,
+        questionId: answerId ? undefined : questionId,
         answerId,
         voteType,
       },

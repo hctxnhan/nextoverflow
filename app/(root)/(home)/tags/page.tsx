@@ -2,7 +2,7 @@ import { Filter } from "@/components/shared/filter/Filter";
 import { LocalSearchbar } from "@/components/shared/local-searchbar/LocalSearchbar";
 import { NoResult } from "@/components/shared/no-result/NoResult";
 import { TagCard } from "./components/TagCard";
-import { LOCAL_SEARCH_FILTER_OPTIONS } from "@/constants";
+import { LOCAL_SEARCH_FILTER_OPTIONS, NO_RESULT_PROPS } from "@/constants";
 import { getAllTags } from "@/lib/actions/tag.actions";
 
 export default async function Page() {
@@ -30,10 +30,7 @@ export default async function Page() {
         ) : (
           <NoResult
             className="mt-8"
-            actionHref="/ask-question"
-            actionText="Ask a question"
-            title="No tags found"
-            description="Start by asking a question and adding tags to it. This will help other developers find your question and answer it."
+            {...NO_RESULT_PROPS.tags}
           />
         )}
       </section>

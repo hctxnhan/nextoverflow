@@ -121,6 +121,28 @@ export const LOCAL_SEARCH_FILTER_OPTIONS = {
       value: "oldest",
     },
   ],
+  collection: [
+    {
+      label: "Most Recent",
+      value: "most-recent",
+    },
+    {
+      label: "Most Voted",
+      value: "most-voted",
+    },
+    {
+      label: "Most Answered",
+      value: "most-answered",
+    },
+    {
+      label: "Oldest",
+      value: "oldest",
+    },
+    {
+      label: "Most Viewed",
+      value: "most-viewed",
+    },
+  ],
 };
 
 export const NO_RESULT_PROPS: Record<string, NoResultProps> = {
@@ -130,5 +152,33 @@ export const NO_RESULT_PROPS: Record<string, NoResultProps> = {
       "Be the first to break the silence! 🚀 Ask a Question and kickstart the discussion. our query could be the next big thing others learn from. Get involved! 💡",
     actionHref: "/ask-question",
     actionText: "Ask a question",
+  },
+  community: {
+    actionHref: "/sign-up",
+    actionText: "Become a member",
+    title: "No users found",
+    description:
+      "Join the community and start asking questions, answering questions, and interacting with other developers.",
+  },
+  tags: {
+    actionHref: "/ask-question",
+    actionText: "Ask a question",
+    title: "No tags found",
+    description:
+      "Start by asking a question and adding tags to it. This will help other developers find your question and answer it.",
+  },
+  questionDetail: {
+    title: "You're lost",
+    description:
+      "The question you're looking for doesn't exist. Maybe the question was deleted or the URL is incorrect. Please check the URL again or contact us if you think this is a mistake.",
+    actionText: "Go back home",
+    actionHref: "/",
+  },
+  collection: {
+    title: "You haven't saved any questions yet",
+    description:
+      "You can save questions by clicking on the bookmark icon on the question detail page.",
+    actionText: "Explore questions",
+    actionHref: "/",
   },
 };

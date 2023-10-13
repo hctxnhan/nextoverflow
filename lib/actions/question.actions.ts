@@ -26,12 +26,50 @@ export async function getQuestions({
         { tags: { some: { name: { contains: search, mode: "insensitive" } } } },
       ],
     },
-    select: {
-      id: true,
+    include: {
       author: { select: { username: true, picture: true, name: true } },
       tags: { select: { name: true } },
-      title: true,
-      createdAt: true,
+      _count: {
+        select: {
+          answers: true,
+        }
+      }
+    },
+    orderBy: { createdAt: "desc" },
+    take: limit,
+    skip: (page - 1) * limit,
+  });
+
+  return questions;
+}
+
+export async function getSavedQuestions({
+  limit = 10,
+  page = 1,
+  search = "",
+  filter = "",
+}: PaginationParams) {
+  const authUser = await currentUser();
+  if (!authUser) {
+    throw new Error("You must be logged in to create a question");
+  }
+
+  const questions = await prisma.userSavedQuestion.findMany({
+    include: {
+      question: {
+        include: {
+          author: { select: { username: true, picture: true, name: true } },
+          tags: { select: { name: true } },
+          _count: {
+            select: {
+              answers: true,
+            }
+          }
+        },
+      },
+    },
+    where: {
+      userId: authUser.id,
     },
     orderBy: { createdAt: "desc" },
     take: limit,
@@ -99,6 +137,7 @@ export async function getQuestionById(id: number) {
               userId: authUser.id,
             },
           },
+          answers: true,
         },
       },
     },
