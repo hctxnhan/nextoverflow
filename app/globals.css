@@ -40,7 +40,7 @@
   }
 
   :root[class~="dark"] {
-    --background: 146 33% 4%;
+    --background: 146 16% 9%;
     --foreground: 150 14% 97%;
     --card: 146 33% 4%;
     --card-foreground: 138 45% 90%;

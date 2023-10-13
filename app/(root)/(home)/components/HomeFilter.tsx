@@ -9,10 +9,10 @@ export function HomeFilter() {
       <LocalSearchbar className="flex-1" />
       <Filter
         className="w-[200px] lg:hidden"
-        options={LOCAL_SEARCH_FILTER_OPTIONS.home}
+        options={LOCAL_SEARCH_FILTER_OPTIONS.question}
       />
       <div className="flex flex-wrap gap-1 max-lg:hidden">
-        {LOCAL_SEARCH_FILTER_OPTIONS.home.map((option) => (
+        {LOCAL_SEARCH_FILTER_OPTIONS.question.map((option) => (
           <Button key={option.value} variant={"outline"} className="text-sm">
             {option.label}
           </Button>

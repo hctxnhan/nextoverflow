@@ -5,6 +5,8 @@ import { currentUser } from "@clerk/nextjs";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { prisma } from "../prismaClient";
+import { LOCAL_SEARCH_FILTER_OPTIONS } from "@/constants";
+import { Prisma } from "@prisma/client";
 
 export type QuestionInHomepage = Awaited<ReturnType<typeof getQuestions>>[0];
 export type QuestionInDetail = NonNullable<
@@ -15,8 +17,24 @@ export async function getQuestions({
   limit = 10,
   page = 1,
   search = "",
-  filter = "",
-}: PaginationParams) {
+  filter = "newest",
+}: PaginationParams<
+  (typeof LOCAL_SEARCH_FILTER_OPTIONS)["question"][number]["value"]
+>) {
+  let orderBy: Prisma.QuestionOrderByWithRelationInput = { createdAt: "desc" };
+
+  switch (filter) {
+    case "popular":
+      orderBy = {
+        answers: {
+          _count: "desc",
+        },
+      };
+      break;
+    default:
+      break;
+  }
+
   const questions = await prisma.question.findMany({
     where: {
       OR: [
@@ -34,7 +52,7 @@ export async function getQuestions({
         },
       },
     },
-    orderBy: { createdAt: "desc" },
+    orderBy,
     take: limit,
     skip: (page - 1) * limit,
   });
@@ -251,4 +269,33 @@ export async function deleteQuestion(questionId: number) {
 
   revalidatePath(`/`);
   redirect(`/`);
+}
+
+export async function getTopQuestions() {
+  return prisma.question.findMany({
+    select: {
+      id: true,
+      title: true,
+    },
+    orderBy: {
+      answers: {
+        _count: "desc",
+      },
+    },
+    take: 5,
+  });
+}
+
+export async function getTopTags() {
+  return prisma.tag.findMany({
+    select: {
+      name: true,
+    },
+    orderBy: {
+      questions: {
+        _count: "desc",
+      },
+    },
+    take: 10,
+  });
 }

@@ -8,11 +8,11 @@ export enum SortOrder {
   DESC = "desc",
 }
 
-export type PaginationParams = {
+export type PaginationParams<T extends string = string> = {
   page: number;
   limit: number;
   search?: string;
-  filter?: string;
+  filter?: T;
 };
 
 export interface SidebarLink {

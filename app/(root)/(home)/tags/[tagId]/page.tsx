@@ -27,7 +27,7 @@ export default async function Page({
           </div>
         </>
       ) : (
-        <NoResult className="mt-8" {...NO_RESULT_PROPS.tagDetail} />
+        <NoResult className="mt-8" {...NO_RESULT_PROPS.home} />
       )}
     </div>
   );
