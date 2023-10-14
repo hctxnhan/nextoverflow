@@ -90,20 +90,6 @@ export const LOCAL_SEARCH_FILTER_OPTIONS = {
       value: "top-contributors",
     },
   ],
-  tags: [
-    {
-      label: "Popular",
-      value: "popular",
-    },
-    {
-      label: "Recent",
-      value: "recent",
-    },
-    {
-      label: "Oldest",
-      value: "oldest",
-    },
-  ],
   answers: [
     {
       label: "Most Upvotes",

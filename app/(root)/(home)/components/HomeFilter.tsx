@@ -10,7 +10,7 @@ import { useState } from "react";
 export function HomeFilter() {
   const searchParams = useSearchParams();
   const currentFilterParam = searchParams.get("filter");
-  const [currentFilter, setCurrentFilter] = useState(currentFilterParam ?? "");
+  const [currentFilter, setCurrentFilter] = useState(currentFilterParam ?? "newest");
 
   function handleFilterChange(value: string) {
     return () => {

@@ -3,15 +3,15 @@ import { LocalSearchbar } from "@/components/shared/local-searchbar/LocalSearchb
 import { NoResult } from "@/components/shared/no-result/NoResult";
 import { LOCAL_SEARCH_FILTER_OPTIONS, NO_RESULT_PROPS } from "@/constants";
 import { getAllUsers } from "@/lib/actions/user.actions";
-import { SortOrder } from "@/types";
+import { SearchParamsProps } from "@/types";
 import { UserCard } from "./components/UserCard";
 
-export default async function Page() {
+export default async function Page({ searchParams }: SearchParamsProps) {
   const users = await getAllUsers({
     limit: 10,
     page: 1,
-    sortBy: "joinedAt",
-    sortOrder: SortOrder.DESC,
+    filter: searchParams.filter,
+    search: searchParams.search,
   });
 
   return (
@@ -21,6 +21,7 @@ export default async function Page() {
       <div className="flex gap-2">
         <LocalSearchbar className="flex-1" />
         <Filter
+          defaultFilter="new-users"
           className="w-[200px]"
           options={LOCAL_SEARCH_FILTER_OPTIONS.community}
         />

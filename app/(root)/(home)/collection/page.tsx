@@ -4,11 +4,16 @@ import { NoResult } from "@/components/shared/no-result/NoResult";
 import { LOCAL_SEARCH_FILTER_OPTIONS, NO_RESULT_PROPS } from "@/constants";
 import { getSavedQuestions } from "@/lib/actions/question.actions";
 import { QuestionCard } from "../components/QuestionCard";
+import { SearchParamsProps } from "@/types";
 
-export default async function Page() {
+export default async function Page(
+  { searchParams }: SearchParamsProps,
+) {
   const questions = await getSavedQuestions({
     page: 1,
     limit: 10,
+    search: searchParams.search,
+    filter: searchParams.filter,
   });
 
   return (
@@ -17,6 +22,7 @@ export default async function Page() {
       <div className="flex gap-2">
         <LocalSearchbar className="flex-1" />
         <Filter
+          defaultFilter="most-recent"
           className="w-[200px]"
           options={LOCAL_SEARCH_FILTER_OPTIONS.collection}
         />

@@ -8,7 +8,7 @@ export default authMiddleware({
     "/question/:questionId",
     "/community",
     "/jobs",
-    "/profile/[username]",
+    "/profile/:username",
   ],
 });
 

@@ -70,11 +70,43 @@ export async function getSavedQuestions({
   limit = 10,
   page = 1,
   search = "",
-  filter = "",
+  filter = "most-recent",
 }: PaginationParams) {
   const authUser = await currentUser();
   if (!authUser) {
     throw new Error("You must be logged in to create a question");
+  }
+
+  let orderBy: Prisma.UserSavedQuestionOrderByWithRelationInput = {
+    createdAt: "desc",
+  };
+
+  switch (filter) {
+    case "most-voted":
+      orderBy = {
+        question: {
+          votes: {
+            _count: "desc",
+          },
+        },
+      };
+      break;
+    case "most-answered":
+      orderBy = {
+        question: {
+          answers: {
+            _count: "desc",
+          },
+        },
+      };
+      break;
+    case "oldest":
+      orderBy = {
+        createdAt: "asc",
+      };
+      break;
+    default:
+      break;
   }
 
   const questions = await prisma.userSavedQuestion.findMany({
@@ -93,8 +125,17 @@ export async function getSavedQuestions({
     },
     where: {
       userId: authUser.id,
+      question: {
+        OR: [
+          { title: { contains: search, mode: "insensitive" } },
+          { content: { contains: search, mode: "insensitive" } },
+          {
+            tags: { some: { name: { contains: search, mode: "insensitive" } } },
+          },
+        ],
+      },
     },
-    orderBy: { createdAt: "desc" },
+    orderBy,
     take: limit,
     skip: (page - 1) * limit,
   });
@@ -119,7 +160,7 @@ export async function createQuestion(params: {
     },
     update: {
       title: params.title,
-      content: params.body,
+      content: params.body.trim(),
       tags: {
         deleteMany: {},
         connectOrCreate: params.tags.map((tag) => ({
@@ -130,7 +171,7 @@ export async function createQuestion(params: {
     },
     create: {
       title: params.title,
-      content: params.body,
+      content: params.body.trim(),
       author: {
         connect: {
           clerkId: authUser.id,
@@ -228,7 +269,12 @@ async function unsaveQuestion(questionId: number, userId: string) {
   return result;
 }
 
-export async function getQuestionByTagId({ tagId }: { tagId: string }) {
+export async function getQuestionByTagId({
+  tagId,
+  search = "",
+  limit,
+  page,
+}: { tagId: string } & PaginationParams) {
   return prisma.question.findMany({
     where: {
       tags: {
@@ -236,6 +282,10 @@ export async function getQuestionByTagId({ tagId }: { tagId: string }) {
           name: tagId,
         },
       },
+      OR: [
+        { title: { contains: search, mode: "insensitive" } },
+        { content: { contains: search, mode: "insensitive" } },
+      ],
     },
     include: {
       author: true,
@@ -246,6 +296,11 @@ export async function getQuestionByTagId({ tagId }: { tagId: string }) {
         },
       },
     },
+    orderBy: {
+      createdAt: "desc",
+    },
+    skip: (page - 1) * limit,
+    take: limit,
   });
 }
 

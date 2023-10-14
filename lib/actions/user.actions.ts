@@ -100,16 +100,35 @@ export async function deleteUser({
   return user;
 }
 
-export async function getAllUsers(
-  params: {
-    sortBy: "joinedAt" | "name" | "contributions";
-    sortOrder: SortOrder;
-  } & PaginationParams,
-) {
+export async function getAllUsers({
+  limit,
+  page,
+  filter = "new-users",
+  search = "",
+}: PaginationParams) {
+  let orderBy: Prisma.UserOrderByWithRelationInput = {
+    joinedAt: SortOrder.DESC,
+  };
+
+  switch (filter) {
+    case "old-users":
+      orderBy = {
+        joinedAt: SortOrder.ASC,
+      };
+      break;
+    case "top-contributors":
+      orderBy = {
+        answers: {
+          _count: SortOrder.DESC,
+        },
+      };
+      break;
+    default:
+      break;
+  }
+
   const users = await prisma.user.findMany({
-    orderBy: {
-      [params.sortBy]: params.sortOrder,
-    },
+    orderBy,
     select: {
       username: true,
       name: true,
@@ -118,10 +137,23 @@ export async function getAllUsers(
       joinedAt: true,
     },
     where: {
-      username: params.search ? { contains: params.search } : undefined,
+      OR: [
+        {
+          username: {
+            contains: search,
+            mode: "insensitive",
+          },
+        },
+        {
+          name: {
+            contains: search,
+            mode: "insensitive",
+          },
+        },
+      ],
     },
-    skip: (params.page - 1) * params.limit,
-    take: params.limit,
+    skip: (page - 1) * limit,
+    take: limit,
   });
 
   return users;
