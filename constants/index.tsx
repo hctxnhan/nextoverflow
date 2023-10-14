@@ -75,7 +75,7 @@ export const LOCAL_SEARCH_FILTER_OPTIONS = {
     { label: "Frequent", value: "frequent" },
     { label: "Unanswered", value: "unanswered" },
     { label: "Popular", value: "popular" },
-  ] as const,
+  ],
   community: [
     {
       label: "New Users",

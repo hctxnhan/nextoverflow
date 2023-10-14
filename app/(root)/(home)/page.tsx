@@ -6,11 +6,16 @@ import { NoResult } from "@/components/shared/no-result/NoResult";
 import { NO_RESULT_PROPS } from "@/constants";
 import Link from "next/link";
 import { getQuestions } from "@/lib/actions/question.actions";
+import { SearchParamsProps } from "@/types";
 
-export default async function Home() {
+export default async function Home({ searchParams }: SearchParamsProps) {
+  const { search, filter } = searchParams;
+
   const questions = await getQuestions({
     page: 1,
     limit: 10,
+    search,
+    filter,
   });
 
   return (

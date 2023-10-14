@@ -2,11 +2,10 @@
 
 import { PaginationParams } from "@/types";
 import { currentUser } from "@clerk/nextjs";
+import { Prisma } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { prisma } from "../prismaClient";
-import { LOCAL_SEARCH_FILTER_OPTIONS } from "@/constants";
-import { Prisma } from "@prisma/client";
 
 export type QuestionInHomepage = Awaited<ReturnType<typeof getQuestions>>[0];
 export type QuestionInDetail = NonNullable<
@@ -18,10 +17,15 @@ export async function getQuestions({
   page = 1,
   search = "",
   filter = "newest",
-}: PaginationParams<
-  (typeof LOCAL_SEARCH_FILTER_OPTIONS)["question"][number]["value"]
->) {
+}: PaginationParams) {
   let orderBy: Prisma.QuestionOrderByWithRelationInput = { createdAt: "desc" };
+  let where: Prisma.QuestionWhereInput = {
+    OR: [
+      { title: { contains: search, mode: "insensitive" } },
+      { content: { contains: search, mode: "insensitive" } },
+      { tags: { some: { name: { contains: search, mode: "insensitive" } } } },
+    ],
+  };
 
   switch (filter) {
     case "popular":
@@ -31,18 +35,21 @@ export async function getQuestions({
         },
       };
       break;
+    case "unanswered":
+      where = {
+        ...where,
+        answers: {
+          none: {},
+        },
+      };
+      break;
     default:
       break;
   }
 
   const questions = await prisma.question.findMany({
-    where: {
-      OR: [
-        { title: { contains: search, mode: "insensitive" } },
-        { content: { contains: search, mode: "insensitive" } },
-        { tags: { some: { name: { contains: search, mode: "insensitive" } } } },
-      ],
-    },
+    where,
+    orderBy,
     include: {
       author: { select: { username: true, picture: true, name: true } },
       tags: { select: { name: true } },
@@ -52,7 +59,6 @@ export async function getQuestions({
         },
       },
     },
-    orderBy,
     take: limit,
     skip: (page - 1) * limit,
   });
