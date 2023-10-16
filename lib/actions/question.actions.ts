@@ -6,18 +6,26 @@ import { Prisma } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { prisma } from "../prismaClient";
+import { PaginationSchema } from "../validation";
 
-export type QuestionInHomepage = Awaited<ReturnType<typeof getQuestions>>[0];
+export type QuestionInHomepage = Awaited<
+  ReturnType<typeof getQuestions>
+>["questions"][number];
 export type QuestionInDetail = NonNullable<
   Awaited<ReturnType<typeof getQuestionById>>
 >;
 
 export async function getQuestions({
-  limit = 10,
-  page = 1,
+  limit,
+  page,
   search = "",
   filter = "newest",
 }: PaginationParams) {
+  const parsedParams = PaginationSchema.parse({
+    page,
+    pageSize: limit,
+  });
+
   let orderBy: Prisma.QuestionOrderByWithRelationInput = { createdAt: "desc" };
   let where: Prisma.QuestionWhereInput = {
     OR: [
@@ -47,7 +55,7 @@ export async function getQuestions({
       break;
   }
 
-  const questions = await prisma.question.findMany({
+  const getQuestions = prisma.question.findMany({
     where,
     orderBy,
     include: {
@@ -59,19 +67,39 @@ export async function getQuestions({
         },
       },
     },
-    take: limit,
-    skip: (page - 1) * limit,
+    take: parsedParams.pageSize,
+    skip: (parsedParams.page - 1) * parsedParams.pageSize,
   });
 
-  return questions;
+  const countQuestions = prisma.question.count({
+    where,
+  });
+
+  const [questions, total] = await prisma.$transaction([
+    getQuestions,
+    countQuestions,
+  ]);
+
+  const totalPage = Math.ceil(total / parsedParams.pageSize);
+
+  return {
+    questions,
+    total,
+    totalPage,
+  };
 }
 
 export async function getSavedQuestions({
-  limit = 10,
-  page = 1,
+  limit,
+  page,
   search = "",
   filter = "most-recent",
 }: PaginationParams) {
+  const parsedParams = PaginationSchema.parse({
+    page,
+    pageSize: limit,
+  });
+
   const authUser = await currentUser();
   if (!authUser) {
     throw new Error("You must be logged in to create a question");
@@ -109,7 +137,20 @@ export async function getSavedQuestions({
       break;
   }
 
-  const questions = await prisma.userSavedQuestion.findMany({
+  const where: Prisma.UserSavedQuestionWhereInput = {
+    userId: authUser.id,
+    question: {
+      OR: [
+        { title: { contains: search, mode: "insensitive" } },
+        { content: { contains: search, mode: "insensitive" } },
+        {
+          tags: { some: { name: { contains: search, mode: "insensitive" } } },
+        },
+      ],
+    },
+  };
+
+  const getSavedQuestion = prisma.userSavedQuestion.findMany({
     include: {
       question: {
         include: {
@@ -123,24 +164,28 @@ export async function getSavedQuestions({
         },
       },
     },
-    where: {
-      userId: authUser.id,
-      question: {
-        OR: [
-          { title: { contains: search, mode: "insensitive" } },
-          { content: { contains: search, mode: "insensitive" } },
-          {
-            tags: { some: { name: { contains: search, mode: "insensitive" } } },
-          },
-        ],
-      },
-    },
+    where,
     orderBy,
-    take: limit,
-    skip: (page - 1) * limit,
+    take: parsedParams.pageSize,
+    skip: (parsedParams.page - 1) * parsedParams.pageSize,
   });
 
-  return questions;
+  const getCount = prisma.userSavedQuestion.count({
+    where,
+  });
+
+  const [questions, total] = await prisma.$transaction([
+    getSavedQuestion,
+    getCount,
+  ]);
+
+  const totalPage = Math.ceil(total / parsedParams.pageSize);
+
+  return {
+    questions,
+    total,
+    totalPage,
+  };
 }
 
 export async function createQuestion(params: {
@@ -275,6 +320,11 @@ export async function getQuestionByTagId({
   limit,
   page,
 }: { tagId: string } & PaginationParams) {
+  const parsedParams = PaginationSchema.parse({
+    page,
+    pageSize: limit,
+  });
+
   return prisma.question.findMany({
     where: {
       tags: {
@@ -299,8 +349,8 @@ export async function getQuestionByTagId({
     orderBy: {
       createdAt: "desc",
     },
-    skip: (page - 1) * limit,
-    take: limit,
+    take: parsedParams.pageSize,
+    skip: (parsedParams.page - 1) * parsedParams.pageSize,
   });
 }
 

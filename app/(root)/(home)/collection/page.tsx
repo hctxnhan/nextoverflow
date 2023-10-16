@@ -5,13 +5,12 @@ import { LOCAL_SEARCH_FILTER_OPTIONS, NO_RESULT_PROPS } from "@/constants";
 import { getSavedQuestions } from "@/lib/actions/question.actions";
 import { QuestionCard } from "../components/QuestionCard";
 import { SearchParamsProps } from "@/types";
+import { Pagination } from "@/components/shared/pagination/Pagination";
 
-export default async function Page(
-  { searchParams }: SearchParamsProps,
-) {
-  const questions = await getSavedQuestions({
-    page: 1,
-    limit: 10,
+export default async function Page({ searchParams }: SearchParamsProps) {
+  const data = await getSavedQuestions({
+    page: searchParams.page,
+    limit: searchParams.limit,
     search: searchParams.search,
     filter: searchParams.filter,
   });
@@ -28,14 +27,15 @@ export default async function Page(
         />
       </div>
 
-      {questions.length > 0 ? (
+      {data.questions.length > 0 ? (
         <div className="flex flex-col gap-8">
-          {questions.map((question) => (
+          {data.questions.map((question) => (
             <QuestionCard
               key={question.questionId}
               question={question.question}
             />
           ))}
+          <Pagination total={data.totalPage} />
         </div>
       ) : (
         <NoResult className="mt-8" {...NO_RESULT_PROPS.collection} />

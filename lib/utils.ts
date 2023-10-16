@@ -1,5 +1,7 @@
-import { type ClassValue, clsx } from "clsx";
+import { clsx, type ClassValue } from "clsx";
+import { ReadonlyURLSearchParams } from "next/navigation";
 import { twMerge } from "tailwind-merge";
+import { PaginationSchema } from "./validation";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -52,3 +54,11 @@ export const formatAndDivideNumber = (num: number): string => {
   }
 };
 
+export function parsePaginationParams(params: ReadonlyURLSearchParams) {
+  const parsedParams = PaginationSchema.parse({
+    page: params.get("page"),
+    pageSize: params.get("limit"),
+  });
+
+  return parsedParams;
+}

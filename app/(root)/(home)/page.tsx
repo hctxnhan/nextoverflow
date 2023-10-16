@@ -1,19 +1,20 @@
-import { Button } from "@/components/ui/button";
-import { HomeFilter } from "./components/HomeFilter";
-import { PlusIcon } from "lucide-react";
-import { QuestionCard } from "./components/QuestionCard";
 import { NoResult } from "@/components/shared/no-result/NoResult";
+import { Pagination } from "@/components/shared/pagination/Pagination";
+import { Button } from "@/components/ui/button";
 import { NO_RESULT_PROPS } from "@/constants";
-import Link from "next/link";
 import { getQuestions } from "@/lib/actions/question.actions";
 import { SearchParamsProps } from "@/types";
+import { PlusIcon } from "lucide-react";
+import Link from "next/link";
+import { HomeFilter } from "./components/HomeFilter";
+import { QuestionCard } from "./components/QuestionCard";
 
 export default async function Home({ searchParams }: SearchParamsProps) {
-  const { search, filter } = searchParams;
+  const { search, filter, page, limit } = searchParams;
 
-  const questions = await getQuestions({
-    page: 1,
-    limit: 10,
+  const data = await getQuestions({
+    page,
+    limit,
     search,
     filter,
   });
@@ -31,11 +32,12 @@ export default async function Home({ searchParams }: SearchParamsProps) {
       </div>
       <HomeFilter />
 
-      {questions.length > 0 ? (
+      {data.questions.length > 0 ? (
         <div className="flex flex-col gap-8">
-          {questions.map((question) => (
+          {data.questions.map((question) => (
             <QuestionCard key={question.id} question={question} />
           ))}
+          <Pagination total={data.totalPage} />
         </div>
       ) : (
         <NoResult className="mt-8" {...NO_RESULT_PROPS.home} />

@@ -12,8 +12,8 @@ export interface SearchParamsProps {
   searchParams: { [key: string]: string | undefined };
 }
 export type PaginationParams<T extends string = string> = {
-  page: number;
-  limit: number;
+  page?: string;
+  limit?: string;
   search?: string;
   filter?: T;
 };
