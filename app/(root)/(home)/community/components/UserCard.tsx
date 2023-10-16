@@ -17,7 +17,9 @@ export function UserCard({ username, name, imageUrl }: UserCardProps) {
         alt={`${name} profile picture`}
       />
       <p className="h3-bold mt-2">{name}</p>
-      <p className="body-medium text-foreground-light">@{username}</p>
+      <p className="body-medium line-clamp-1 inline-block w-full truncate text-center text-foreground-light">
+        @{username}
+      </p>
     </div>
   );
 }

@@ -22,10 +22,10 @@ export default async function Page({
 
   return (
     <>
-      <div className="mb-8 rounded-md bg-background p-8">
+      <div className="mb-8 rounded-md bg-background p-8 max-sm:p-4">
         <QuestionDetail questionId={questionIdNumber} />
       </div>
-      <div className="rounded-md bg-background p-8">
+      <div className="rounded-md bg-background p-8 max-sm:p-4">
         <SignedIn>
           <AnswerForm className="mb-8" questionId={questionIdNumber} />
         </SignedIn>

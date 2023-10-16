@@ -20,7 +20,11 @@ export function ReplyAnswer({ answerId, totalReply }: ReplyAnswerProps) {
   const canLoadMore = totalReply > answers.length;
 
   async function handleLoadMore() {
-    const nextPage = page + 1;
+    const nextPage = page + 1
+
+    if(!canLoadMore) return
+
+
     const newAnswers = await getReplyOfAnswer({
       answerId,
       page: nextPage,

@@ -13,7 +13,7 @@ export function MarkdownRenderer({
   return (
     <div
       className={cn(
-        "prose prose-neutral dark:prose-invert",
+        "prose-p:break-word prose prose-neutral hyphens-auto dark:prose-invert",
         className,
       )}
     >

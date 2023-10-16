@@ -28,12 +28,11 @@ export async function AnswerList({ questionId, className }: AnswerListProps) {
           options={LOCAL_SEARCH_FILTER_OPTIONS.answers}
         />
       </div>
-      {answers.map((answer, index) => (
-        <>
-          <hr className="my-8" />
+      <div className="mt-10 flex flex-col gap-8">
+        {answers.map((answer) => (
           <AnswerCard key={answer.id} answer={answer} />
-        </>
-      ))}
+        ))}
+      </div>
     </div>
   );
 }

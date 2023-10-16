@@ -44,7 +44,7 @@ export function ReplyBox({ parentAnswer }: ReplyBoxProps) {
       <DialogTrigger asChild>
         <Button variant="link">Add a reply</Button>
       </DialogTrigger>
-      <DialogContent>
+      <DialogContent className="min-w-[500px] max-w-3xl max-sm:h-screen max-sm:w-screen">
         <DialogHeader>
           <DialogTitle>Reply to {parentAnswer.author.name} answers</DialogTitle>
           <DialogDescription className="rounded-md bg-background-darker p-3 text-foreground-light">
