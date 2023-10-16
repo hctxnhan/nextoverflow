@@ -63,7 +63,11 @@ export async function getQuestions({
       tags: { select: { name: true } },
       _count: {
         select: {
-          answers: true,
+          answers: {
+            where: {
+              parentId: null,
+            }
+          },
         },
       },
     },
@@ -258,7 +262,6 @@ export async function getQuestionById(id: number) {
         : undefined,
       _count: {
         select: {
-          // get saved by user if logged in
           savedBy: {
             where: {
               userId: authUser?.id,

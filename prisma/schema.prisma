@@ -58,6 +58,9 @@ model Answer {
   question  Question @relation(fields: [questionId], references: [id])
   questionId Int
   votes     Vote[]
+  parent   Answer?  @relation("ReplyTo", fields: [parentId], references: [id])
+  parentId Int?
+  replies  Answer[] @relation("ReplyTo")
 }
 
 enum VoteType {

@@ -1,4 +1,4 @@
-import { getAnswerById } from "@/lib/actions/answer.actions";
+import { AnswerDetail } from "@/lib/actions/answer.actions";
 import {
   countVoteOfAnswer,
   handleVoteQuestion,
@@ -8,27 +8,24 @@ import { ArrowUpSquareIcon } from "lucide-react";
 import { VoteButton } from "./VoteButton";
 
 interface VoteForAnswerProps {
-  answerId: number;
+  answer: AnswerDetail;
 }
 
-export async function VoteForAnswer({ answerId }: VoteForAnswerProps) {
-  const getAnswer = getAnswerById(answerId);
-  const getVoteCount = countVoteOfAnswer(answerId);
-
-  const [answer, vote] = await Promise.all([getAnswer, getVoteCount]);
+export async function VoteForAnswer({ answer }: VoteForAnswerProps) {
+  const vote = await countVoteOfAnswer(answer.id);
 
   if (!answer) return null;
 
   const currentUserVote = answer.votes?.length > 0 ? answer.votes[0] : null;
 
   const handleUpvote = handleVoteQuestion.bind(null, {
-    questionId: answer.questionId,
+    questionId: answer.question.id,
     answerId: answer.id,
     voteType: VoteType.UPVOTE,
   });
 
   const handleDownvote = handleVoteQuestion.bind(null, {
-    questionId: answer.questionId,
+    questionId: answer.question.id,
     answerId: answer.id,
     voteType: VoteType.DOWNVOTE,
   });

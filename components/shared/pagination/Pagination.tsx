@@ -49,8 +49,6 @@ export function Pagination({ total }: PaginationProps) {
 
   if (total <= 1) return null;
 
-  console.log(page);
-
   return (
     <div className="flex-center gap-2">
       <Button disabled={page === 1} variant={"outline"} onClick={handleBack}>
