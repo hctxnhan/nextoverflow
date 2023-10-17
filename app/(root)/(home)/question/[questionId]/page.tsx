@@ -22,7 +22,7 @@ export default async function Page({
 
   return (
     <>
-      <div className="mb-8 rounded-md bg-background p-8 max-sm:p-4">
+      <div className="mb-8 rounded-md bg-background p-8 max-sm:mb-4 max-sm:p-4">
         <QuestionDetail questionId={questionIdNumber} />
       </div>
       <div className="rounded-md bg-background p-8 max-sm:p-4">

@@ -10,12 +10,18 @@ import { Menu } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { SidebarLink } from "./SidebarLink";
+import { GlobalSearch } from "./GlobalSearch";
 
 export function MobileNav() {
   return (
     <Sheet>
       <SheetTrigger asChild>
-        <Button variant="ghost" size={"icon"} className="sm:hidden">
+        <Button
+          variant="ghost"
+          type="button"
+          size={"icon"}
+          className="sm:hidden"
+        >
           <Menu width={20} height={20} />
         </Button>
       </SheetTrigger>
@@ -34,6 +40,8 @@ export function MobileNav() {
             </p>
           </Link>
 
+
+          <GlobalSearch className="my-3" />
           <SidebarLink />
 
           <SignedOut>

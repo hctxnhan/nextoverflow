@@ -25,3 +25,10 @@ export interface SidebarLink {
 }
 
 export type QuestionFormType = z.infer<typeof QuestionFormSchema>;
+
+export type GlobalSearchResult = {
+  id: string;
+  title: string;
+  content: string;
+  type: string;
+};

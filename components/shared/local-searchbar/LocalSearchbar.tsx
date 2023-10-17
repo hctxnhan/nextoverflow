@@ -35,7 +35,7 @@ export function LocalSearchbar({
     const newParams = new URLSearchParams(searchParams);
 
     if (debouncedSearch) {
-      newParams.set("search", debouncedSearch);
+      newParams.set("search", debouncedSearch.debouncedValue);
     } else {
       newParams.delete("search");
     }

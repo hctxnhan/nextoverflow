@@ -14,8 +14,8 @@ export default function Layout({ children }: Props) {
       <div className="flex">
         <LeftSidebar />
 
-        <main className="max-sm:pt-navBar min-h-screen flex-1 bg-background-darker pb-10 pt-24 max-sm:p-0 sm:px-14">
-          <div className="mx-auto w-full max-w-5xl pt-4 max-sm:pt-0">
+        <main className="min-h-screen flex-1 bg-background-darker pt-navBar">
+          <div className="mx-auto w-full max-w-5xl px-4 py-3 md:p-12">
             {children}
           </div>
         </main>

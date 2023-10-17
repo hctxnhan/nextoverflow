@@ -7,7 +7,7 @@ import { GlobalSearch } from "./GlobalSearch";
 
 export function Navbar() {
   return (
-    <nav className="flex-between h-navBar fixed z-50 w-full bg-background p-4">
+    <nav className="flex-between fixed z-50 h-navBar w-full bg-background p-4">
       <Link href="/" className="flex-center gap-2">
         <Image
           src={"/assets/images/site-logo.svg"}
@@ -21,7 +21,7 @@ export function Navbar() {
         </p>
       </Link>
 
-      <GlobalSearch />
+      <GlobalSearch className="max-lg:hidden" />
 
       <div className="flex-center gap-2">
         <ThemeSwitcher />
