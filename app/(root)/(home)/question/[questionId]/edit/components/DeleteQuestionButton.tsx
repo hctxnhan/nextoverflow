@@ -1,23 +1,38 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import { FormButton } from "@/components/ui/form-button";
-import {
-  deleteQuestion,
-  isQuestionBelongToCurrentUser,
-} from "@/lib/actions/question.actions";
+import { useToast } from "@/components/ui/use-toast";
+import { deleteQuestion } from "@/lib/actions/question.actions";
 import { FileX } from "lucide-react";
 
 interface DeleteQuestionButtonProps {
   questionId: number;
 }
 
-export async function DeleteQuestionButton({
+export function DeleteQuestionButton({
   questionId,
 }: DeleteQuestionButtonProps) {
-  const isOwner = await isQuestionBelongToCurrentUser(questionId);
-  if (!isOwner) return null;
+  const { toast } = useToast();
+
+  async function handleDeleteQuestion() {
+    try {
+      await deleteQuestion(questionId);
+      toast({
+        title: "Question deleted",
+        description: "Your question has been deleted successfully.",
+      });
+    } catch (error) {
+      toast({
+        title: "Something went wrong",
+        description: "Your question could not be deleted.",
+        variant: "destructive",
+      });
+    }
+  }
 
   return (
-    <form action={deleteQuestion.bind(null, questionId)}>
+    <form action={handleDeleteQuestion}>
       <FormButton>
         <Button
           variant={"customIcon"}

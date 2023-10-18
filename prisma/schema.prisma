@@ -24,8 +24,8 @@ model Question {
   createdAt DateTime @default(now())
   tags      Tag[]
   updatedAt DateTime @updatedAt
-  author    User     @relation(fields: [authorId], references: [clerkId])
-  authorId  String
+  author    User?     @relation(fields: [authorId], references: [clerkId], onDelete: SetNull)
+  authorId  String?
   answers   Answer[]
   votes     Vote[]
   savedBy   UserSavedQuestion[]
@@ -86,9 +86,9 @@ model Vote {
 model UserSavedQuestion {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  user    User     @relation(fields: [userId], references: [clerkId])
+  user    User     @relation(fields: [userId], references: [clerkId], onDelete: Cascade)
   userId  String
-  question  Question @relation(fields: [questionId], references: [id])
+  question  Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
   questionId Int
 
   @@id([userId, questionId])

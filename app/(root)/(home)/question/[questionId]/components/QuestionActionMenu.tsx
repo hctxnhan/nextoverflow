@@ -1,9 +1,12 @@
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuTrigger
+  DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { getQuestionById } from "@/lib/actions/question.actions";
+import {
+  getQuestionById,
+  isQuestionBelongToCurrentUser,
+} from "@/lib/actions/question.actions";
 import { MoreVertical } from "lucide-react";
 import { DeleteQuestionButton } from "../edit/components/DeleteQuestionButton";
 import { EditQuestionButton } from "../edit/components/EditQuestionButton";
@@ -19,6 +22,8 @@ export async function QuestionActionMenu({
   const question = await getQuestionById(questionId);
   if (!question) return null;
 
+  const isOwner = await isQuestionBelongToCurrentUser(questionId);
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger>
@@ -30,8 +35,12 @@ export async function QuestionActionMenu({
             hasSaved={question._count.savedBy > 0}
             questionId={questionId}
           />
-          <EditQuestionButton questionId={questionId} />
-          <DeleteQuestionButton questionId={questionId} />
+          {isOwner && (
+            <>
+              <EditQuestionButton questionId={questionId} />
+              <DeleteQuestionButton questionId={questionId} />
+            </>
+          )}
         </div>
       </DropdownMenuContent>
     </DropdownMenu>

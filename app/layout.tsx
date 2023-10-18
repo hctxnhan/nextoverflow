@@ -7,6 +7,7 @@ import { ReactNode } from "react";
 import { ThemeProvider } from "@/context/ThemeProvider";
 import { cn } from "@/lib/utils";
 import { clerkStyleConfig } from "@/lib/clerkStyleConfig";
+import { Toaster } from "@/components/ui/toaster";
 
 const body = Rubik({ subsets: ["latin"], variable: "--font-body" });
 
@@ -38,6 +39,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           >
             {children}
           </ThemeProvider>
+          <Toaster />
         </body>
       </ClerkProvider>
     </html>

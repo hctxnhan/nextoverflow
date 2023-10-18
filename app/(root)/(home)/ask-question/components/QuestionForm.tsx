@@ -14,6 +14,7 @@ import {
   FormRequiredIndicator,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { useToast } from "@/components/ui/use-toast";
 import { createQuestion } from "@/lib/actions/question.actions";
 import { QuestionFormSchema } from "@/lib/validation";
 import { QuestionFormType } from "@/types";
@@ -44,6 +45,7 @@ function getButtonLabel(editing: boolean, loading: boolean) {
 
 export function QuestionForm({ prefill, questionId }: QuestionFormProps) {
   const isEditing = !!questionId && !!prefill;
+  const { toast } = useToast();
 
   const form = useForm<QuestionFormType>({
     resolver: zodResolver(QuestionFormSchema),
@@ -62,6 +64,13 @@ export function QuestionForm({ prefill, questionId }: QuestionFormProps) {
       tags: data.tags,
       title: data.title,
       questionId,
+    });
+
+    toast({
+      title: isEditing ? "Question updated" : "Question created",
+      description: isEditing
+        ? "Your question has been updated successfully"
+        : "Your question has been created successfully",
     });
   }
 
