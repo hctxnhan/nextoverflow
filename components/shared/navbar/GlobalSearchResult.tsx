@@ -58,7 +58,7 @@ export function GlobalSearchResult({
       case "question":
         return `/question/${item.id}`;
       case "tag":
-        return `/tag/${item.id}`;
+        return `/tags/${item.id}`;
       case "user":
         return `/user/${item.id}`;
       default:

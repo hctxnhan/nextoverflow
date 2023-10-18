@@ -6,8 +6,8 @@ import { getQuestions } from "@/lib/actions/question.actions";
 import { SearchParamsProps } from "@/types";
 import { PlusIcon } from "lucide-react";
 import Link from "next/link";
-import { HomeFilter } from "./components/HomeFilter";
-import { QuestionCard } from "./components/QuestionCard";
+import { HomeFilter } from "../components/HomeFilter";
+import { QuestionCard } from "../components/QuestionCard";
 
 export default async function Home({ searchParams }: SearchParamsProps) {
   const { search, filter, page, limit } = searchParams;

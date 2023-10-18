@@ -46,21 +46,21 @@ export const SIDE_NAV_ITEMS: SidebarLink[] = [
     route: "/collection",
     label: "Collections",
   },
-  {
-    Icon: SuitcaseSvg,
-    route: "/jobs",
-    label: "Find Jobs",
-  },
+  // {
+  //   Icon: SuitcaseSvg,
+  //   route: "/jobs",
+  //   label: "Find Jobs",
+  // },
   {
     Icon: TagSvg,
     route: "/tags",
     label: "Tags",
   },
-  {
-    Icon: UserSvg,
-    route: "/profile",
-    label: "Profile",
-  },
+  // {
+  //   Icon: UserSvg,
+  //   route: "/profile",
+  //   label: "Profile",
+  // },
   {
     Icon: QuestionSvg,
     route: "/ask-question",

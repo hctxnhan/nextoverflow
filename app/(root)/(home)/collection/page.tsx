@@ -1,11 +1,11 @@
 import { Filter } from "@/components/shared/filter/Filter";
 import { LocalSearchbar } from "@/components/shared/local-searchbar/LocalSearchbar";
 import { NoResult } from "@/components/shared/no-result/NoResult";
+import { Pagination } from "@/components/shared/pagination/Pagination";
 import { LOCAL_SEARCH_FILTER_OPTIONS, NO_RESULT_PROPS } from "@/constants";
 import { getSavedQuestions } from "@/lib/actions/question.actions";
-import { QuestionCard } from "../components/QuestionCard";
 import { SearchParamsProps } from "@/types";
-import { Pagination } from "@/components/shared/pagination/Pagination";
+import { QuestionCard } from "../components/QuestionCard";
 
 export default async function Page({ searchParams }: SearchParamsProps) {
   const data = await getSavedQuestions({

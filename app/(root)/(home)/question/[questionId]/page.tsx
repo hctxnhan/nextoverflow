@@ -2,8 +2,8 @@ import { getQuestionById } from "@/lib/actions/question.actions";
 import { SignedIn } from "@clerk/nextjs";
 import { AnswerForm } from "./components/AnswerForm";
 import { AnswerList, preload } from "./components/AnswerList";
-import { QuestionDetail } from "./components/QuestionDetail";
 import { NoQuestionFound } from "./components/NoQuestionFound";
+import { QuestionDetail } from "./components/QuestionDetail";
 
 export default async function Page({
   params: { questionId },

@@ -16,7 +16,7 @@ export function UserCard({ username, name, imageUrl }: UserCardProps) {
         className="rounded-full"
         alt={`${name} profile picture`}
       />
-      <p className="h3-bold mt-2">{name}</p>
+      <p className="h3-bold">{name}</p>
       <p className="body-medium line-clamp-1 inline-block w-full truncate text-center text-foreground-light">
         @{username}
       </p>

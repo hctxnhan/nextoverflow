@@ -1,9 +1,9 @@
+import { LocalSearchbar } from "@/components/shared/local-searchbar/LocalSearchbar";
 import { NoResult } from "@/components/shared/no-result/NoResult";
 import { NO_RESULT_PROPS } from "@/constants";
 import { getQuestionByTagId } from "@/lib/actions/question.actions";
-import { QuestionCard } from "../../components/QuestionCard";
-import { LocalSearchbar } from "@/components/shared/local-searchbar/LocalSearchbar";
 import { SearchParamsProps } from "@/types";
+import { QuestionCard } from "../../components/QuestionCard";
 
 export default async function Page({
   params: { tagId },

@@ -3,7 +3,7 @@ import { NoResult } from "@/components/shared/no-result/NoResult";
 import { NO_RESULT_PROPS } from "@/constants";
 import { getAllTags } from "@/lib/actions/tag.actions";
 import { SearchParamsProps } from "@/types";
-import { TagCard } from "./components/TagCard";
+import { TagCard } from "../components/TagCard";
 import { Pagination } from "@/components/shared/pagination/Pagination";
 
 export default async function Page({ searchParams }: SearchParamsProps) {

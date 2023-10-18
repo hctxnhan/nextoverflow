@@ -21,7 +21,7 @@ export function LocalSearchbar({
   const searchParams = useSearchParams();
   const router = useRouter();
   const [currentSearch, setCurrentSearch] = useState("");
-  const debouncedSearch = useDebounce(currentSearch, 500);
+  const { debouncedValue } = useDebounce(currentSearch, 500);
 
   const currentSearchParam = searchParams.get("search");
 
@@ -34,14 +34,14 @@ export function LocalSearchbar({
   useEffect(() => {
     const newParams = new URLSearchParams(searchParams);
 
-    if (debouncedSearch) {
-      newParams.set("search", debouncedSearch.debouncedValue);
+    if (debouncedValue) {
+      newParams.set("search", debouncedValue);
     } else {
       newParams.delete("search");
     }
 
     router.push(`?${newParams.toString()}`);
-  }, [debouncedSearch, router, searchParams]);
+  }, [debouncedValue, router, searchParams]);
 
   return (
     <div className={cn("relative h-auto flex-1", className)}>

@@ -12,10 +12,10 @@ import { cn } from "@/lib/utils";
 export function GlobalSearch({ className }: { className?: string }) {
   const [search, setSearch] = useState("");
   const [showResult, setShowResult] = useState(false);
-  const debouncedSearch = useDebounce(search, 500);
+  const { debouncedValue, loading: debounceLoading } = useDebounce(search, 500);
   const [results, setResults] = useState<IGlobalSearchResult[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [_, startTransition] = useTransition();
+  const [, startTransition] = useTransition();
 
   const searchContainerRef = useRef<HTMLDivElement>(null);
   useClickOutside(searchContainerRef, () => setShowResult(false));
@@ -23,20 +23,17 @@ export function GlobalSearch({ className }: { className?: string }) {
   useEffect(() => {
     setIsLoading(true);
     setResults([]);
-  }, [debouncedSearch.debouncedValue]);
+  }, [debouncedValue]);
 
   useEffect(() => {
-    if (debouncedSearch.debouncedValue) {
+    if (debouncedValue) {
       startTransition(async () => {
-        const result = await globalSearch(debouncedSearch.debouncedValue);
+        const result = await globalSearch(debouncedValue);
         setResults(result);
         setIsLoading(false);
       });
-    } else {
-      setResults([]);
-      setIsLoading(false);
     }
-  }, [debouncedSearch.debouncedValue]);
+  }, [debouncedValue]);
 
   return (
     <div
@@ -50,12 +47,13 @@ export function GlobalSearch({ className }: { className?: string }) {
       />
       <Input
         value={search}
+        onFocus={() => setShowResult(true)}
         onChange={(e) => setSearch(e.target.value)}
         placeholder="Search anything..."
         className="h-full border-none bg-background-darker p-2 pl-10 shadow-none"
       />
       <GlobalSearchResult
-        isLoading={isLoading || debouncedSearch.loading}
+        isLoading={isLoading || debounceLoading}
         searchTerm={search}
         open={showResult}
         result={results}
