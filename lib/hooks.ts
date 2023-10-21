@@ -35,3 +35,50 @@ export function useClickOutside(ref: any, callback: () => void) {
     };
   });
 }
+
+export function usePagination<T>({
+  loadMoreFn,
+  pageSize = 10,
+  initialPage = 1,
+}: {
+  loadMoreFn: (...args: any[]) => Promise<T[]>;
+  pageSize?: number;
+  initialPage?: number;
+}) {
+  const [page, setPage] = useState(initialPage);
+  const [loading, setLoading] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
+  const [items, setItems] = useState<T[]>([]);
+
+  async function loadMore() {
+    if (!hasMore) return;
+    if (loading) return;
+
+    setLoading(true);
+
+    const newItems = await loadMoreFn(page, pageSize);
+
+    if (newItems.length < pageSize) {
+      setHasMore(false);
+    }
+
+    // setItems((prev) => [...prev, ...newItems]);
+
+    setLoading(false);
+    // setPage((prev) => prev + 1);
+  }
+
+  useEffect(() => {
+    console.log("useEffect");
+    loadMore();
+  }, []);
+
+  return {
+    page,
+    setPage,
+    loading,
+    hasMore,
+    items,
+    loadMore,
+  };
+}

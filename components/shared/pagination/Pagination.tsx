@@ -40,7 +40,9 @@ export function Pagination({ total }: PaginationProps) {
 
       newParams.set("page", pageNumber.toString() ?? 1);
 
-      router.push(`?${newParams.toString()}`);
+      router.push(`?${newParams.toString()}`, {
+        scroll: false,
+      });
     };
   }
 

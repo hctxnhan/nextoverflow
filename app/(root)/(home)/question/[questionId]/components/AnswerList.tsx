@@ -1,21 +1,26 @@
 import { Filter } from "@/components/shared/filter/Filter";
 import { LOCAL_SEARCH_FILTER_OPTIONS } from "@/constants";
-import { getAnswerOfQuestion } from "@/lib/actions/answer.actions";
-import "server-only";
-import { AnswerCard } from "./AnswerCard";
 import { cn } from "@/lib/utils";
+import { AnswerCard } from "./AnswerCard";
+import { getAnswerOfQuestion } from "@/lib/actions/answer.actions";
+import { Pagination } from "@/components/shared/pagination/Pagination";
 
 interface AnswerListProps {
   questionId: number;
   className?: string;
+  page?: number;
 }
 
-export const preload = (questionId: number) =>
-  // eslint-disable-next-line no-void
-  void getAnswerOfQuestion(questionId);
-
-export async function AnswerList({ questionId, className }: AnswerListProps) {
-  const answers = await getAnswerOfQuestion(questionId);
+export async function AnswerList({
+  questionId,
+  className,
+  page,
+}: AnswerListProps) {
+  const { answers, totalPage } = await getAnswerOfQuestion({
+    questionId,
+    page,
+    limit: 5,
+  });
 
   return (
     <div className={cn(className)}>
@@ -33,6 +38,8 @@ export async function AnswerList({ questionId, className }: AnswerListProps) {
           <AnswerCard key={answer.id} answer={answer} />
         ))}
       </div>
+
+      <Pagination total={totalPage} />
     </div>
   );
 }

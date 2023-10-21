@@ -12,7 +12,8 @@ import { shortenContent } from "../utils";
 
 export type ParentAnswerDetail = Awaited<
   ReturnType<typeof getAnswerOfQuestion>
->[0];
+>["answers"][number];
+
 export type ReplyAnswerDetail = Omit<ParentAnswerDetail, "_count">;
 export type AnswerDetail = ReplyAnswerDetail & {
   _count?: {
@@ -73,9 +74,9 @@ export async function createAnswer(params: {
     createNewNotification({
       userId: answerDetail.question.authorId,
       data: {
-        title: `${authUser!.name} answered your question: ${
-          shortenContent(answerDetail.question.title)
-        }`,
+        title: `${authUser!.name} answered your question: ${shortenContent(
+          answerDetail.question.title,
+        )}`,
         content: shortenContent(params.body),
       },
       action: "Go to question",
@@ -88,8 +89,19 @@ export async function createAnswer(params: {
   return result;
 }
 
-export async function getAnswerOfQuestion(questionId: number) {
-  const answers = await prisma.answer.findMany({
+export async function getAnswerOfQuestion({
+  page,
+  limit = 10,
+  questionId,
+}: PaginationParams & {
+  questionId: number;
+}) {
+  const parsedParams = PaginationSchema.parse({
+    page,
+    pageSize: limit,
+  });
+
+  const getAnswers = prisma.answer.findMany({
     where: {
       questionId,
       parentId: null,
@@ -120,9 +132,28 @@ export async function getAnswerOfQuestion(questionId: number) {
     orderBy: {
       createdAt: "asc",
     },
+    skip: (parsedParams.page - 1) * parsedParams.pageSize,
+    take: parsedParams.pageSize,
   });
 
-  return answers;
+  const getTotalAnswers = prisma.answer.count({
+    where: {
+      questionId,
+      parentId: null,
+    },
+  });
+
+  const [answers, totalAnswers] = await Promise.all([
+    getAnswers,
+    getTotalAnswers,
+  ]);
+
+  const totalPage = Math.ceil(totalAnswers / parsedParams.pageSize);
+
+  return {
+    answers,
+    totalPage,
+  };
 }
 
 // export async function getAnswerById(id: number) {
@@ -157,7 +188,7 @@ export async function replyToAnswer({
   parentAnswerId: number;
   content: string;
 }) {
-  const authUser = await currentUser();
+  const authUser = await getCurrentUser();
   if (!authUser) {
     throw new Error("You must be logged in to reply to an answer");
   }
@@ -175,7 +206,7 @@ export async function replyToAnswer({
   const reply: Prisma.AnswerCreateInput = {
     author: {
       connect: {
-        clerkId: authUser.id,
+        clerkId: authUser.clerkId,
       },
     },
     content,
@@ -193,6 +224,19 @@ export async function replyToAnswer({
 
   const result = await prisma.answer.create({
     data: reply,
+  });
+
+  await createNewNotification({
+    userId: parentAnswer.authorId,
+    data: {
+      title: `${authUser!.name} replied to your answer: ${shortenContent(
+        parentAnswer.content,
+      )}`,
+
+      content: shortenContent(content),
+    },
+    action: "Go to question",
+    actionHref: `/question/${parentAnswer.questionId}`,
   });
 
   revalidatePath(`/question/${parentAnswer.questionId}`);

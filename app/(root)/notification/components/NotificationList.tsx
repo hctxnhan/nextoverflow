@@ -13,12 +13,13 @@ import {
   removeReadNotifications,
 } from "@/lib/actions/notification.actions";
 import { Notification } from "@prisma/client";
-import { BellIcon } from "lucide-react";
+import { BellIcon, Loader2Icon } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { NotificationItem } from "./NotificationItem";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { cn } from "@/lib/utils";
 
 export function NotificationList() {
   const [notifications, setNotifications] = useState<Notification[]>([]);
@@ -26,12 +27,17 @@ export function NotificationList() {
   const [page, setPage] = useState(1);
   const [filter, setFilter] = useState<"all" | "read" | "unread">("all");
   const [hasMore, setHasMore] = useState(true);
+  const [isFetching, setIsFetching] = useState(false);
 
   function loadMore(
     page: number,
     filter: "all" | "read" | "unread",
     previousList: Notification[],
   ) {
+    if (isFetching) return;
+
+    setIsFetching(true);
+
     getNotificationList({
       page,
       limit: 4,
@@ -44,6 +50,8 @@ export function NotificationList() {
           data: JSON.parse(notification.data as string),
         })),
       ]);
+
+      setIsFetching(false);
 
       if (newNotifications.length < 4) {
         setHasMore(false);
@@ -140,14 +148,26 @@ export function NotificationList() {
           </div>
         </RadioGroup>
 
-        <div className="flex max-h-[500px] flex-col gap-2 overflow-y-auto">
+        <div
+          className={cn(
+            "flex max-h-[500px] flex-col gap-2 overflow-y-auto",
+            isFetching && "justify-center overflow-hidden",
+          )}
+        >
           {notifications.map((notification) => (
             // @ts-ignore TODO: Fix this
             <NotificationItem key={notification.id} {...notification} />
           ))}
+          {isFetching && (
+            <Loader2Icon
+              height={30}
+              width={30}
+              className="my-2 animate-spin self-center text-foreground-light"
+            />
+          )}
         </div>
         <div className="flex-center mt-2 flex-col">
-          {hasMore && (
+          {hasMore && !isFetching && (
             <Button
               onClick={onLoadMoreButtonClick}
               variant={"link"}
