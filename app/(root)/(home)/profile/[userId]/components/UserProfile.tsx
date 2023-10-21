@@ -18,7 +18,7 @@ export function UserProfile({
   return (
     <div className="space-y-14">
       <div className="flex flex-col gap-4">
-        <div className="flex gap-4 max-sm:flex-col">
+        <div className="flex items-start gap-4 max-sm:flex-col">
           <Image
             src={userInfo.picture ?? "/assets/images/default-logo.svg"}
             width={170}
@@ -36,7 +36,7 @@ export function UserProfile({
             </p>
             <div className="mt-6 flex items-center gap-2">
               <CalendarCheck2 />
-              <p>
+              <p className="small-regular">
                 Joined{" "}
                 {new Date(userInfo.joinedAt).toLocaleDateString("en-US", {
                   year: "numeric",
@@ -48,7 +48,7 @@ export function UserProfile({
         </div>
         <SignedIn>
           {isCurrentUser && (
-            <Link  className="self-end" href={`/profile/edit`}>
+            <Link className="self-end" href={`/profile/edit`}>
               <Button>Edit Profile</Button>
             </Link>
           )}
