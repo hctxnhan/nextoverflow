@@ -4,6 +4,7 @@ import Link from "next/link";
 import { ThemeSwitcher } from "./ThemeSwitcher";
 import { MobileNav } from "./MobileNav";
 import { GlobalSearch } from "./GlobalSearch";
+import { NotificationList } from "@/app/(root)/notification/components/NotificationList";
 
 export function Navbar() {
   return (
@@ -26,6 +27,7 @@ export function Navbar() {
       <div className="flex-center gap-2">
         <ThemeSwitcher />
         <SignedIn>
+          <NotificationList />
           <UserButton
             afterSignOutUrl="/"
             appearance={{

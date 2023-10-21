@@ -6,6 +6,9 @@ import { prisma } from "../prismaClient";
 import { revalidatePath } from "next/cache";
 import { PaginationParams } from "@/types";
 import { PaginationSchema } from "../validation";
+import { createNewNotification } from "./notification.actions";
+import { getCurrentUser } from "./user.actions";
+import { shortenContent } from "../utils";
 
 export type ParentAnswerDetail = Awaited<
   ReturnType<typeof getAnswerOfQuestion>
@@ -21,7 +24,8 @@ export async function createAnswer(params: {
   body: string;
   questionId: number;
 }) {
-  const authUser = await currentUser();
+  const authUser = await getCurrentUser();
+
   if (!authUser) {
     throw new Error("You must be logged in to create an answer");
   }
@@ -29,7 +33,7 @@ export async function createAnswer(params: {
   const answer: Prisma.AnswerCreateInput = {
     author: {
       connect: {
-        clerkId: authUser.id,
+        clerkId: authUser.clerkId,
       },
     },
     content: params.body,
@@ -43,6 +47,41 @@ export async function createAnswer(params: {
   const result = await prisma.answer.create({
     data: answer,
   });
+
+  const answerDetail = await prisma.answer.findUnique({
+    where: {
+      id: result.id,
+    },
+    select: {
+      author: {
+        select: {
+          username: true,
+          name: true,
+        },
+      },
+      question: {
+        select: {
+          id: true,
+          title: true,
+          authorId: true,
+        },
+      },
+    },
+  });
+
+  if (answerDetail && answerDetail?.question.authorId) {
+    createNewNotification({
+      userId: answerDetail.question.authorId,
+      data: {
+        title: `${authUser!.name} answered your question: ${
+          shortenContent(answerDetail.question.title)
+        }`,
+        content: shortenContent(params.body),
+      },
+      action: "Go to question",
+      actionHref: `/question/${answerDetail.question.id}`,
+    });
+  }
 
   revalidatePath(`/question/${params.questionId}`);
 
@@ -77,6 +116,9 @@ export async function getAnswerOfQuestion(questionId: number) {
           replies: true,
         },
       },
+    },
+    orderBy: {
+      createdAt: "asc",
     },
   });
 

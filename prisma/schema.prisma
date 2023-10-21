@@ -11,57 +11,58 @@ datasource db {
 }
 
 model Tag {
-  name      String  @id
+  name        String     @id
   description String?
-  followers User[]
-  questions Question[]
+  followers   User[]
+  questions   Question[]
 }
 
 model Question {
-  id        Int      @id @default(autoincrement())
+  id        Int                 @id @default(autoincrement())
   title     String
-  content      String
-  createdAt DateTime @default(now())
+  content   String
+  createdAt DateTime            @default(now())
   tags      Tag[]
-  updatedAt DateTime @updatedAt
-  author    User?     @relation(fields: [authorId], references: [clerkId], onDelete: SetNull)
+  updatedAt DateTime            @updatedAt
+  author    User?               @relation(fields: [authorId], references: [clerkId], onDelete: SetNull)
   authorId  String?
   answers   Answer[]
   votes     Vote[]
   savedBy   UserSavedQuestion[]
-  views     Int      @default(0)
+  views     Int                 @default(0)
 }
 
 model User {
-  clerkId   String   @id
-  name      String?
-  username  String   @unique
-  email     String   @unique
-  password  String?
-  bio       String?
-  picture   String?
-  reputation Int      @default(0)
-  joinedAt  DateTime @default(now())
-  questions Question[]
-  answers   Answer[]
-  followedTags Tag[]
-  votes     Vote[]
+  clerkId        String              @id
+  name           String?
+  username       String              @unique
+  email          String              @unique
+  password       String?
+  bio            String?
+  picture        String?
+  reputation     Int                 @default(0)
+  joinedAt       DateTime            @default(now())
+  questions      Question[]
+  answers        Answer[]
+  followedTags   Tag[]
+  votes          Vote[]
   savedQuestions UserSavedQuestion[]
+  notifications  Notification[]
 }
 
 model Answer {
-  id        Int      @id @default(autoincrement())
-  content      String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  author    User     @relation(fields: [authorId], references: [clerkId])
-  authorId  String
-  question  Question @relation(fields: [questionId], references: [id])
+  id         Int      @id @default(autoincrement())
+  content    String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  author     User     @relation(fields: [authorId], references: [clerkId])
+  authorId   String
+  question   Question @relation(fields: [questionId], references: [id])
   questionId Int
-  votes     Vote[]
-  parent   Answer?  @relation("ReplyTo", fields: [parentId], references: [id])
-  parentId Int?
-  replies  Answer[] @relation("ReplyTo")
+  votes      Vote[]
+  parent     Answer?  @relation("ReplyTo", fields: [parentId], references: [id])
+  parentId   Int?
+  replies    Answer[] @relation("ReplyTo")
 }
 
 enum VoteType {
@@ -70,27 +71,39 @@ enum VoteType {
 }
 
 model Vote {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  user    User     @relation(fields: [userId], references: [clerkId])
-  userId  String
-  question  Question? @relation(fields: [questionId], references: [id])
+  id         Int       @id @default(autoincrement())
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  user       User      @relation(fields: [userId], references: [clerkId])
+  userId     String
+  question   Question? @relation(fields: [questionId], references: [id])
   questionId Int?
-  answer    Answer?   @relation(fields: [answerId], references: [id])
-  answerId  Int?
-  voteType  VoteType
+  answer     Answer?   @relation(fields: [answerId], references: [id])
+  answerId   Int?
+  voteType   VoteType
 
   @@unique([userId, questionId, answerId])
 }
 
 model UserSavedQuestion {
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  user    User     @relation(fields: [userId], references: [clerkId], onDelete: Cascade)
-  userId  String
-  question  Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  user       User     @relation(fields: [userId], references: [clerkId], onDelete: Cascade)
+  userId     String
+  question   Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
   questionId Int
 
   @@id([userId, questionId])
+}
+
+model Notification {
+  id         Int      @id @default(autoincrement())
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  user       User     @relation(fields: [userId], references: [clerkId], onDelete: Cascade)
+  userId     String
+  read       Boolean  @default(false)
+  data       Json
+  action     String?
+  actionHref String?
 }

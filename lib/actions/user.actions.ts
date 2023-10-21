@@ -43,6 +43,16 @@ export async function getUserById({
   return user;
 }
 
+export async function getCurrentUser() {
+  const authUser = await currentUser();
+
+  if (!authUser) {
+    throw new Error("User not logged in");
+  }
+
+  return getUserById({ clerkId: authUser.id });
+}
+
 export async function createUser({
   clerkId,
   email,

@@ -62,3 +62,11 @@ export function parsePaginationParams(params: ReadonlyURLSearchParams) {
 
   return parsedParams;
 }
+
+export function shortenContent(content: string, maxLength = 100) {
+  if (content.length <= maxLength) {
+    return content;
+  }
+
+  return content.slice(0, maxLength) + "...";
+}
