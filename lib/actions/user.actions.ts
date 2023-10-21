@@ -5,6 +5,7 @@ import { Prisma } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 import { prisma } from "../prismaClient";
 import { PaginationSchema } from "../validation";
+import { currentUser } from "@clerk/nextjs";
 
 interface UserOperationParams {
   username: string;
@@ -15,17 +16,27 @@ interface UserOperationParams {
   picture: string;
 }
 
+export type UserProfile = NonNullable<
+  Awaited<ReturnType<typeof getUserProfile>>
+>;
+
+export type UserBasicInfo = NonNullable<
+  Awaited<ReturnType<typeof getUserById>>
+>;
+
 export async function getUserById({
   clerkId,
 }: Pick<UserOperationParams, "clerkId">) {
   const user = await prisma.user.findUnique({
     where: { clerkId },
     select: {
+      clerkId: true,
       username: true,
       name: true,
       picture: true,
       email: true,
       joinedAt: true,
+      bio: true,
     },
   });
 
@@ -170,10 +181,12 @@ export async function getUserProfile(userId: string) {
   return prisma.user.findUnique({
     where: { clerkId: userId },
     select: {
+      clerkId: true,
       username: true,
       name: true,
       picture: true,
       joinedAt: true,
+      bio: true,
       questions: {
         select: {
           id: true,
@@ -195,9 +208,9 @@ export async function getUserProfile(userId: string) {
               votes: {
                 where: {
                   voteType: "UPVOTE",
-                }
-              }
-            }
+                },
+              },
+            },
           },
         },
         take: 10,
@@ -232,7 +245,7 @@ export async function getUserProfile(userId: string) {
               votes: {
                 where: {
                   voteType: "UPVOTE",
-                }
+                },
               },
               replies: true,
             },
@@ -255,5 +268,20 @@ export async function getUserProfile(userId: string) {
         },
       },
     },
+  });
+}
+
+export async function updateUserProfile(
+  data: Partial<Omit<UserOperationParams, "clerkId">>
+) {
+  const authUser = await currentUser();
+
+  if (!authUser) {
+    throw new Error("User not logged in");
+  }
+
+  return updateUser({
+    clerkId: authUser.id,
+    data,
   });
 }

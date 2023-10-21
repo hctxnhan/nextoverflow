@@ -20,3 +20,9 @@ export const PaginationSchema = z.object({
   page: z.coerce.number().int().positive().min(1).default(1).catch(() => 1),
   pageSize: z.coerce.number().int().positive().min(1).max(50).default(10).catch(() => 10),
 }).passthrough();
+
+export const ProfileSchema = z.object({
+  name: z.string().min(3).max(50),
+  username: z.string().min(3).max(20),
+  bio: z.string().min(10).max(150)
+}).passthrough();
