@@ -29,6 +29,7 @@ model Question {
   answers   Answer[]
   votes     Vote[]
   savedBy   UserSavedQuestion[]
+  views     Int      @default(0)
 }
 
 model User {

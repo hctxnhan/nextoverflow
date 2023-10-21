@@ -62,6 +62,7 @@ export async function getQuestions({
       author: { select: { username: true, picture: true, name: true } },
       tags: { select: { name: true } },
       id: true,
+      views: true,
       title: true,
       createdAt: true,
       _count: {
@@ -419,5 +420,18 @@ export async function getTopTags() {
       },
     },
     take: 10,
+  });
+}
+
+export async function viewQuestion(questionId: number) {
+  return prisma.question.update({
+    where: {
+      id: questionId,
+    },
+    data: {
+      views: {
+        increment: 1,
+      },
+    },
   });
 }

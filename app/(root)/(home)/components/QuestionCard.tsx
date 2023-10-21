@@ -1,7 +1,7 @@
 import { Tag } from "@/components/shared/tag/Tag";
 import { QuestionInHomepage } from "@/lib/actions/question.actions";
 import { formatAndDivideNumber, getTimestamp } from "@/lib/utils";
-import { ArrowBigUp, MessageCircle } from "lucide-react";
+import { ArrowBigUp, EyeIcon, MessageCircle } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -10,7 +10,7 @@ interface QuestionCardProps {
 }
 
 export function QuestionCard({
-  question: { id, author, tags, title, createdAt, _count },
+  question: { id, author, tags, title, createdAt, _count, views },
 }: QuestionCardProps) {
   return (
     <Link href={`/question/${id}`}>
@@ -35,6 +35,10 @@ export function QuestionCard({
             <span>{getTimestamp(createdAt)}</span>
           </div>
           <div className="flex justify-end gap-3">
+            <div className="flex-center small-regular gap-1">
+              <EyeIcon width={15} height={15} />
+              {formatAndDivideNumber(views)} views
+            </div>
             <div className="flex-center small-regular gap-1">
               <ArrowBigUp width={18} height={18} />
               {formatAndDivideNumber(_count.votes)} upvotes

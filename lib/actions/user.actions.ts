@@ -177,6 +177,7 @@ export async function getUserProfile(userId: string) {
       questions: {
         select: {
           id: true,
+          views: true,
           title: true,
           tags: true,
           createdAt: true,

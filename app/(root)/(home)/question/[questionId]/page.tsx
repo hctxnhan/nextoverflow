@@ -4,6 +4,7 @@ import { AnswerForm } from "./components/AnswerForm";
 import { AnswerList, preload } from "./components/AnswerList";
 import { NoQuestionFound } from "./components/NoQuestionFound";
 import { QuestionDetail } from "./components/QuestionDetail";
+import { ViewCountTrigger } from "./components/ViewCountTrigger";
 
 export default async function Page({
   params: { questionId },
@@ -21,7 +22,7 @@ export default async function Page({
   preload(questionIdNumber);
 
   return (
-    <>
+    <ViewCountTrigger questionId={questionIdNumber}>
       <div className="mb-8 rounded-md bg-background p-8 max-sm:mb-4 max-sm:p-4">
         <QuestionDetail questionId={questionIdNumber} />
       </div>
@@ -31,6 +32,6 @@ export default async function Page({
         </SignedIn>
         <AnswerList questionId={questionIdNumber} />
       </div>
-    </>
+    </ViewCountTrigger>
   );
 }
