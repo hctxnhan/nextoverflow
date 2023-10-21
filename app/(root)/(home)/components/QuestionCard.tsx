@@ -1,7 +1,7 @@
 import { Tag } from "@/components/shared/tag/Tag";
 import { QuestionInHomepage } from "@/lib/actions/question.actions";
 import { formatAndDivideNumber, getTimestamp } from "@/lib/utils";
-import { EyeIcon, MessageCircle } from "lucide-react";
+import { ArrowBigUp, MessageCircle } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -24,24 +24,20 @@ export function QuestionCard({
         <div className="flex-between mt-6 gap-1 text-foreground-dark max-md:flex-col max-md:items-start">
           <div className="small-regular flex items-center gap-1  max-md:order-1">
             <Image
-              src={author.picture ?? "/assets/images/default-logo.svg"}
+              src={author?.picture ?? "/assets/images/default-logo.svg"}
               width={20}
               height={20}
               alt="avatar"
               className="rounded-full"
             />
             <span className="max-md:hidden">asked by</span>{" "}
-            <span className="small-medium text-primary">{author.name}</span>{" "}
+            <span className="small-medium text-primary">{author?.name}</span>{" "}
             <span>{getTimestamp(createdAt)}</span>
           </div>
           <div className="flex justify-end gap-3">
-            {/* <div className="flex-center small-regular gap-1">
-              <ThumbsUp width={15} height={15} />
-              {formatAndDivideNumber(upvotes)} upvotes
-            </div> */}
             <div className="flex-center small-regular gap-1">
-              <EyeIcon width={15} height={15} />
-              {formatAndDivideNumber(12)} views
+              <ArrowBigUp width={18} height={18} />
+              {formatAndDivideNumber(_count.votes)} upvotes
             </div>
             <div className="flex-center small-regular gap-1">
               <MessageCircle width={15} height={15} />

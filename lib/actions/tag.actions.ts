@@ -1,7 +1,6 @@
 "use server";
 import { PaginationParams } from "@/types";
 import { prisma } from "../prismaClient";
-import { Prisma } from "@prisma/client";
 import { PaginationSchema } from "../validation";
 
 export type TagInTagsPage = Awaited<ReturnType<typeof getAllTags>>["tags"][number];
@@ -16,7 +15,7 @@ export async function getAllTags({
     pageSize: limit,
   });
 
-  const query: Prisma.TagFindManyArgs = {
+  const getTags = prisma.tag.findMany({
     where: {
       name: {
         contains: search,
@@ -34,11 +33,15 @@ export async function getAllTags({
     },
     take: parsedParams.pageSize,
     skip: (parsedParams.page - 1) * parsedParams.pageSize,
-  };
-
-  const getTags = prisma.tag.findMany(query);
+  });
+  
   const countTags = prisma.tag.count({
-    where: query.where,
+    where: {
+      name: {
+        contains: search,
+        mode: "insensitive",
+      },
+    },
   });
 
   const [tags, count] = await prisma.$transaction([getTags, countTags]);

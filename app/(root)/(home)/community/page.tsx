@@ -35,6 +35,7 @@ export default async function Page({ searchParams }: SearchParamsProps) {
                 imageUrl={user.picture}
                 username={user.username}
                 name={user.name}
+                userId={user.clerkId}
                 key={user.username}
               />
             ))}

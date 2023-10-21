@@ -58,16 +58,24 @@ export async function getQuestions({
   const getQuestions = prisma.question.findMany({
     where,
     orderBy,
-    include: {
+    select: {
       author: { select: { username: true, picture: true, name: true } },
       tags: { select: { name: true } },
+      id: true,
+      title: true,
+      createdAt: true,
       _count: {
         select: {
           answers: {
             where: {
               parentId: null,
-            }
+            },
           },
+          votes: {
+            where: {
+              voteType: "UPVOTE",
+            }
+          }
         },
       },
     },

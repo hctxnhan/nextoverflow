@@ -1,9 +1,10 @@
 "use server";
 
-import { Prisma } from "@prisma/client";
-import { prisma } from "../prismaClient";
-import { revalidatePath } from "next/cache";
 import { PaginationParams, SortOrder } from "@/types";
+import { Prisma } from "@prisma/client";
+import { revalidatePath } from "next/cache";
+import { prisma } from "../prismaClient";
+import { PaginationSchema } from "../validation";
 
 interface UserOperationParams {
   username: string;
@@ -106,6 +107,11 @@ export async function getAllUsers({
   filter = "new-users",
   search = "",
 }: PaginationParams) {
+  const parsedParams = PaginationSchema.parse({
+    page,
+    pageSize: limit,
+  });
+
   let orderBy: Prisma.UserOrderByWithRelationInput = {
     joinedAt: SortOrder.DESC,
   };
@@ -130,6 +136,7 @@ export async function getAllUsers({
   const users = await prisma.user.findMany({
     orderBy,
     select: {
+      clerkId: true,
       username: true,
       name: true,
       picture: true,
@@ -152,9 +159,100 @@ export async function getAllUsers({
         },
       ],
     },
-    skip: (page - 1) * limit,
-    take: limit,
+    skip: (parsedParams.page - 1) * parsedParams.pageSize,
+    take: parsedParams.pageSize,
   });
 
   return users;
+}
+
+export async function getUserProfile(userId: string) {
+  return prisma.user.findUnique({
+    where: { clerkId: userId },
+    select: {
+      username: true,
+      name: true,
+      picture: true,
+      joinedAt: true,
+      questions: {
+        select: {
+          id: true,
+          title: true,
+          tags: true,
+          createdAt: true,
+          author: {
+            select: {
+              clerkId: true,
+              name: true,
+              username: true,
+              picture: true,
+            },
+          },
+          _count: {
+            select: {
+              answers: true,
+              votes: {
+                where: {
+                  voteType: "UPVOTE",
+                }
+              }
+            }
+          },
+        },
+        take: 10,
+        orderBy: {
+          answers: {
+            _count: SortOrder.DESC,
+          },
+        },
+      },
+      answers: {
+        select: {
+          id: true,
+          content: true,
+          question: {
+            select: {
+              title: true,
+              tags: true,
+              id: true,
+              createdAt: true,
+              author: {
+                select: {
+                  clerkId: true,
+                  name: true,
+                  username: true,
+                  picture: true,
+                },
+              },
+            },
+          },
+          _count: {
+            select: {
+              votes: {
+                where: {
+                  voteType: "UPVOTE",
+                }
+              },
+              replies: true,
+            },
+          },
+        },
+        where: {
+          parentId: null,
+        },
+        take: 10,
+        orderBy: {
+          votes: {
+            _count: SortOrder.DESC,
+          },
+        },
+      },
+      _count: {
+        select: {
+          questions: true,
+          answers: true,
+        },
+      },
+    },
+  });
 }

@@ -1,13 +1,12 @@
-import { SidebarLink } from "@/types";
-import { ComputerIcon, MoonIcon, SunIcon } from "lucide-react";
+import { NoResultProps } from "@/components/shared/no-result/NoResult";
 import HomeSvg from "@/public/assets/icons/home.svg";
-import CommunitySvg from "@/public/assets/icons/users.svg";
+import QuestionSvg from "@/public/assets/icons/question.svg";
 import StarSvg from "@/public/assets/icons/star.svg";
-import SuitcaseSvg from "@/public/assets/icons/suitcase.svg";
 import TagSvg from "@/public/assets/icons/tag.svg";
 import UserSvg from "@/public/assets/icons/user.svg";
-import QuestionSvg from "@/public/assets/icons/question.svg";
-import { NoResultProps } from "@/components/shared/no-result/NoResult";
+import CommunitySvg from "@/public/assets/icons/users.svg";
+import { SidebarLink } from "@/types";
+import { ComputerIcon, MoonIcon, SunIcon } from "lucide-react";
 
 export const THEMES = [
   {
@@ -56,11 +55,11 @@ export const SIDE_NAV_ITEMS: SidebarLink[] = [
     route: "/tags",
     label: "Tags",
   },
-  // {
-  //   Icon: UserSvg,
-  //   route: "/profile",
-  //   label: "Profile",
-  // },
+  {
+    Icon: UserSvg,
+    route: "/profile",
+    label: "Profile",
+  },
   {
     Icon: QuestionSvg,
     route: "/ask-question",

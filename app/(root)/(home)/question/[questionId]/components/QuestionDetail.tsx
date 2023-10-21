@@ -17,14 +17,14 @@ export async function QuestionDetail({ questionId }: { questionId: number }) {
       <div className="flex-between">
         <div className="body-regular mb-2 flex items-center text-foreground-light">
           <Image
-            src={question.author.picture ?? "/assets/images/default-logo.svg"}
+            src={question.author?.picture ?? "/assets/images/default-logo.svg"}
             width={24}
             height={24}
             alt="avatar"
             className="mr-2 rounded-full"
           />
           <p>
-            <span className="body-medium">{question.author.name}</span>
+            <span className="body-medium">{question.author?.name}</span>
             <span> asked {getTimestamp(question.createdAt)}</span>
           </p>
         </div>
