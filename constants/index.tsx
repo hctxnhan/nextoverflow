@@ -174,4 +174,11 @@ export const NO_RESULT_PROPS: Record<string, NoResultProps> = {
     actionText: "Go back home",
     actionHref: "/",
   },
+  topQuestions: {
+    title: "Looks like you are new here!",
+    description:
+      "Start by asking a question and adding tags to it. This will help other developers find your question and answer it.",
+    actionText: "Ask a question",
+    actionHref: "/ask-question",
+  },
 };

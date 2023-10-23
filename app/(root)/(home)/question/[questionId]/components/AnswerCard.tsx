@@ -1,22 +1,26 @@
 import { MarkdownRenderer } from "@/components/shared/markdown-renderer/MarkdownRenderer";
-import { Button } from "@/components/ui/button";
-import { AnswerDetail } from "@/lib/actions/answer.actions";
-import { cn, getTimestamp } from "@/lib/utils";
-import Image from "next/image";
-import { VoteForAnswer } from "./VoteForAnswer";
-import { ReplyBox } from "./ReplyBox";
 import {
   Activate,
   ActivateContent,
   ActivateTrigger,
 } from "@/components/ui/activate";
+import { Button } from "@/components/ui/button";
+import { AnswerDetail } from "@/lib/actions/answer.actions";
+import { cn, getTimestamp } from "@/lib/utils";
+import { SignedIn, currentUser } from "@clerk/nextjs";
+import Image from "next/image";
+import { DeleteAnswerButton } from "./DeleteAnswerButton";
 import { ReplyAnswer } from "./ReplyAnswer";
+import { ReplyBox } from "./ReplyBox";
+import { VoteForAnswer } from "./VoteForAnswer";
 
 interface AnswerCardProps {
   answer: AnswerDetail;
 }
 
-export function AnswerCard({ answer }: AnswerCardProps) {
+export async function AnswerCard({ answer }: AnswerCardProps) {
+  const authUser = await currentUser();
+
   return (
     <Activate>
       <div className={cn("rounded-md border border-background-darker p-4")}>
@@ -46,6 +50,15 @@ export function AnswerCard({ answer }: AnswerCardProps) {
               />
             </div>
             <div className="mt-2 flex justify-end gap-4">
+              <SignedIn>
+                {authUser?.id === answer.author.clerkId && (
+                  <DeleteAnswerButton
+                    answerId={answer.id}
+                    content={answer.content}
+                  />
+                )}
+              </SignedIn>
+
               <ActivateTrigger>
                 {answer._count && answer._count.replies > 0 && (
                   <Button variant="link">
@@ -53,7 +66,10 @@ export function AnswerCard({ answer }: AnswerCardProps) {
                   </Button>
                 )}
               </ActivateTrigger>
-              <ReplyBox parentAnswer={answer} />
+
+              <SignedIn>
+                <ReplyBox parentAnswer={answer} />
+              </SignedIn>
             </div>
             <ActivateContent>
               <ReplyAnswer

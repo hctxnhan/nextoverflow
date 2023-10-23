@@ -58,7 +58,7 @@ export async function QuestionDetail({ questionId }: { questionId: number }) {
       <div className="body-regular mt-6 flex gap-10 text-foreground-light">
         <div className="flex-center gap-2">
           <EyeIcon width={15} height={15} />
-          {formatAndDivideNumber(12)} views
+          {formatAndDivideNumber(question.views)} views
         </div>
         <div className="flex-center gap-2">
           <MessageCircle width={15} height={15} />

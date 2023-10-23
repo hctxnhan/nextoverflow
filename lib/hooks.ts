@@ -69,7 +69,6 @@ export function usePagination<T>({
   }
 
   useEffect(() => {
-    console.log("useEffect");
     loadMore();
   }, []);
 
@@ -81,4 +80,39 @@ export function usePagination<T>({
     items,
     loadMore,
   };
+}
+
+export function useLocalStorage<T>(keyName: string, initialValue: T) {
+  const [storedValue, setStoredValue] = useState<T>(() => {
+    try {
+      const value = window.localStorage.getItem(keyName);
+
+      if (value) {
+        return JSON.parse(value);
+      } else {
+        window.localStorage.setItem(keyName, JSON.stringify(initialValue));
+        return initialValue;
+      }
+    } catch (err) {
+      return initialValue;
+    }
+  });
+
+  function setValue(newValue: T) {
+    const store = () => {
+      window.localStorage.setItem(keyName, JSON.stringify(newValue));
+      setStoredValue(newValue);
+    };
+
+    try {
+      store();
+    } catch (err) {
+      if (err === "QUOTA_EXCEEDED_ERR") {
+        window.localStorage.clear();
+        store();
+      }
+    }
+  }
+
+  return { storedValue, setValue };
 }

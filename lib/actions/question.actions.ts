@@ -75,8 +75,8 @@ export async function getQuestions({
           votes: {
             where: {
               voteType: "UPVOTE",
-            }
-          }
+            },
+          },
         },
       },
     },
@@ -172,6 +172,11 @@ export async function getSavedQuestions({
           _count: {
             select: {
               answers: true,
+              votes: {
+                where: {
+                  voteType: "UPVOTE",
+                },
+              },
             },
           },
         },
@@ -355,6 +360,11 @@ export async function getQuestionByTagId({
       _count: {
         select: {
           answers: true,
+          votes: {
+            where: {
+              voteType: "UPVOTE",
+            },
+          },
         },
       },
     },

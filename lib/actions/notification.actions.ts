@@ -5,6 +5,7 @@ import { prisma } from "../prismaClient";
 import { currentUser } from "@clerk/nextjs";
 import { PaginationParams } from "@/types";
 import { PaginationSchema } from "../validation";
+import { revalidateTag } from "next/cache";
 
 export async function createNewNotification(
   notificationData: Pick<
@@ -113,4 +114,6 @@ export async function markAllNotificationsAsRead() {
       read: true,
     },
   });
+
+  revalidateTag(`my-notification`);
 }

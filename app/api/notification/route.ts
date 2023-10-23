@@ -20,6 +20,7 @@ export async function GET(req: NextRequest, res: NextResponse) {
 
   function sendNotification(notification: Notification) {
     if (notification.userId !== authUser?.id) return;
+
     writer.write(
       encoder.encode(`data: ${JSON.stringify(notification)}\n\n`),
     );

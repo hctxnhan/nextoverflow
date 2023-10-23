@@ -1,25 +1,24 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { useToast } from "@/components/ui/use-toast";
 import {
-  getNotificationList,
   markAllNotificationsAsRead,
   removeReadNotifications,
 } from "@/lib/actions/notification.actions";
+import { cn } from "@/lib/utils";
 import { Notification } from "@prisma/client";
 import { BellIcon, Loader2Icon } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { NotificationItem } from "./NotificationItem";
-import { Label } from "@/components/ui/label";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { cn } from "@/lib/utils";
 
 export function NotificationList() {
   const [notifications, setNotifications] = useState<Notification[]>([]);
@@ -29,7 +28,7 @@ export function NotificationList() {
   const [hasMore, setHasMore] = useState(true);
   const [isFetching, setIsFetching] = useState(false);
 
-  function loadMore(
+  async function loadMore(
     page: number,
     filter: "all" | "read" | "unread",
     previousList: Notification[],
@@ -38,32 +37,38 @@ export function NotificationList() {
 
     setIsFetching(true);
 
-    getNotificationList({
-      page,
-      limit: 4,
-      status: filter,
-    }).then((newNotifications) => {
-      setNotifications([
-        ...previousList,
-        ...newNotifications.map((notification) => ({
-          ...notification,
-          data: JSON.parse(notification.data as string),
-        })),
-      ]);
-
-      setIsFetching(false);
-
-      if (newNotifications.length < 4) {
-        setHasMore(false);
-      }
+    const searchParams = new URLSearchParams({
+      page: page.toString(),
+      filter,
+      limit: "5",
     });
+
+    const res = await fetch(`/api/my-notification?${searchParams}`, {
+      next: {
+        revalidate: 600,
+        tags: ["my-notification"],
+      },
+    });
+    const newNotifications = (await res.json()).data;
+    setNotifications([
+      ...previousList,
+      ...newNotifications.map((item: Notification) => ({
+        ...item,
+        data: JSON.parse(item.data as string),
+      })),
+    ]);
+
+    setIsFetching(false);
+
+    if (newNotifications.length < 4) {
+      setHasMore(false);
+    }
   }
 
   function onChangeFilter(value: "all" | "read" | "unread") {
     setFilter(value);
     setPage(1);
     setNotifications([]);
-
     loadMore(1, value, []);
   }
 
@@ -74,10 +79,21 @@ export function NotificationList() {
 
   function handleMarkAllAsReadButtonClick() {
     markAllNotificationsAsRead();
+
+    setNotifications((notifications) =>
+      notifications.map((notification) => ({
+        ...notification,
+        read: true,
+      })),
+    );
   }
 
   function handleRemoveReadNotificationsButtonClick() {
     removeReadNotifications();
+
+    setNotifications((notifications) =>
+      notifications.filter((notification) => !notification.read),
+    );
   }
 
   useEffect(() => {
@@ -91,7 +107,7 @@ export function NotificationList() {
       const notification: Notification = JSON.parse(event.data);
       notification.data = JSON.parse(notification.data as string);
 
-      setNotifications((notifications) => [...notifications, notification]);
+      setNotifications((notifications) => [notification, ...notifications]);
 
       const notificationData = notification.data as {
         title: string;
@@ -112,11 +128,11 @@ export function NotificationList() {
     });
 
     source.addEventListener("error", (event) => {
-      console.error("EventSource failed:", event);
       source.close();
     });
 
     return () => {
+      console.log("Closing EventSource");
       source.close();
     };
   }, []);

@@ -4,6 +4,7 @@ import { cn } from "@/lib/utils";
 import { AnswerCard } from "./AnswerCard";
 import { getAnswerOfQuestion } from "@/lib/actions/answer.actions";
 import { Pagination } from "@/components/shared/pagination/Pagination";
+import { Suspense } from "react";
 
 interface AnswerListProps {
   questionId: number;
@@ -35,7 +36,9 @@ export async function AnswerList({
       </div>
       <div className="mt-10 flex flex-col gap-8">
         {answers.map((answer) => (
-          <AnswerCard key={answer.id} answer={answer} />
+          <Suspense key={answer.id} fallback={<div>Loading...</div>}>
+            <AnswerCard key={answer.id} answer={answer} />
+          </Suspense>
         ))}
       </div>
 

@@ -18,7 +18,7 @@ export function UserProfile({
   return (
     <div className="space-y-14">
       <div className="flex flex-col gap-4">
-        <div className="flex items-start gap-4 max-sm:flex-col">
+        <div className="flex items-center gap-4 max-sm:flex-col">
           <Image
             src={userInfo.picture ?? "/assets/images/default-logo.svg"}
             width={170}
@@ -31,9 +31,11 @@ export function UserProfile({
             <p className="base-medium text-foreground-darker">
               @{userInfo.username}
             </p>
-            <p className="mt-2 text-foreground-darker">
-              &quot;{userInfo.bio}&quot;
-            </p>
+            {userInfo.bio && (
+              <p className="mt-2 text-foreground-darker">
+                &quot;{userInfo.bio}&quot;
+              </p>
+            )}
             <div className="mt-6 flex items-center gap-2">
               <CalendarCheck2 />
               <p className="small-regular">

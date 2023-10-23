@@ -109,6 +109,7 @@ export async function getAnswerOfQuestion({
     select: {
       author: {
         select: {
+          clerkId: true,
           picture: true,
           username: true,
           name: true,
@@ -279,4 +280,40 @@ export async function getReplyOfAnswer({
     skip: (parsedParams.page - 1) * parsedParams.pageSize,
     take: parsedParams.pageSize,
   });
+}
+
+async function isAnswerBelongToCurrentUser(answerId: number) {
+  const authUser = await currentUser();
+  if (!authUser) return false;
+
+  const answer = await prisma.answer.findUnique({
+    where: {
+      id: answerId,
+    },
+    select: {
+      authorId: true,
+    },
+  });
+
+  if (!answer) return false;
+
+  return answer.authorId === authUser.id;
+}
+
+export async function deleteAnswer(answerId: number) {
+  const isBelongToCurrentUser = await isAnswerBelongToCurrentUser(answerId);
+
+  if (!isBelongToCurrentUser) {
+    throw new Error("You don't have permission to delete this answer");
+  }
+
+  const answer = await prisma.answer.delete({
+    where: {
+      id: answerId,
+    },
+  });
+
+  revalidatePath(`/question/${answer.questionId}`);
+
+  return answer;
 }
