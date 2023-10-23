@@ -3,7 +3,9 @@ import { PaginationParams } from "@/types";
 import { prisma } from "../prismaClient";
 import { PaginationSchema } from "../validation";
 
-export type TagInTagsPage = Awaited<ReturnType<typeof getAllTags>>["tags"][number];
+export type TagInTagsPage = Awaited<
+  ReturnType<typeof getAllTags>
+>["tags"][number];
 
 export async function getAllTags({
   limit,
@@ -31,10 +33,15 @@ export async function getAllTags({
         },
       },
     },
+    orderBy: {
+      questions: {
+        _count: "desc",
+      },
+    },
     take: parsedParams.pageSize,
     skip: (parsedParams.page - 1) * parsedParams.pageSize,
   });
-  
+
   const countTags = prisma.tag.count({
     where: {
       name: {

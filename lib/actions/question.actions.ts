@@ -15,6 +15,16 @@ export type QuestionInDetail = NonNullable<
   Awaited<ReturnType<typeof getQuestionById>>
 >;
 
+export async function getQuestionsByIds(ids: number[]) {
+  return prisma.question.findMany({
+    where: {
+      id: {
+        in: ids,
+      },
+    },
+  });
+}
+
 export async function getQuestions({
   limit,
   page,

@@ -31,6 +31,7 @@
     "eslint-plugin-tailwindcss": "^3.13.0",
     "lucide-react": "^0.284.0",
     "marked": "^9.1.2",
+    "natural": "^6.8.0",
     "next": "13.5.4",
     "next-mdx-remote": "^4.4.1",
     "next-themes": "^0.2.1",

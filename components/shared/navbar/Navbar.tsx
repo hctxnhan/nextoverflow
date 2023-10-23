@@ -1,10 +1,10 @@
+import { NotificationList } from "@/app/(root)/notification/components/NotificationList";
 import { SignedIn, UserButton } from "@clerk/nextjs";
 import Image from "next/image";
 import Link from "next/link";
-import { ThemeSwitcher } from "./ThemeSwitcher";
-import { MobileNav } from "./MobileNav";
 import { GlobalSearch } from "./GlobalSearch";
-import { NotificationList } from "@/app/(root)/notification/components/NotificationList";
+import { MobileNav } from "./MobileNav";
+import { ThemeSwitcher } from "./ThemeSwitcher";
 
 export function Navbar() {
   return (

@@ -70,3 +70,7 @@ export function shortenContent(content: string, maxLength = 100) {
 
   return content.slice(0, maxLength) + "...";
 }
+
+export function removeCodeblockFromMarkdown(markdown: string) {
+  return markdown.replace(/```[\s\S]*?```/g, "");
+}

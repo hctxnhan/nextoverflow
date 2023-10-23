@@ -20,8 +20,10 @@ import { QuestionFormSchema } from "@/lib/validation";
 import { QuestionFormType } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { XIcon } from "lucide-react";
-import { KeyboardEvent } from "react";
+import { KeyboardEvent, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import { SimilarityQuestionDialog } from "./SimilarityQuestionDialog";
+import { findSimilarQuestion } from "@/lib/actions/similarity.actions";
 
 interface QuestionFormProps {
   prefill?: QuestionFormType;
@@ -29,7 +31,7 @@ interface QuestionFormProps {
 }
 
 function getButtonLabel(editing: boolean, loading: boolean) {
-  const lable = {
+  const label = {
     create: {
       default: "Post",
       loading: "Posting...",
@@ -40,12 +42,17 @@ function getButtonLabel(editing: boolean, loading: boolean) {
     },
   };
 
-  return lable[editing ? "edit" : "create"][loading ? "loading" : "default"];
+  return label[editing ? "edit" : "create"][loading ? "loading" : "default"];
 }
 
 export function QuestionForm({ prefill, questionId }: QuestionFormProps) {
   const isEditing = !!questionId && !!prefill;
   const { toast } = useToast();
+  const [similarQuestions, setSimilarQuestions] = useState<[string, number][]>(
+    [],
+  );
+  const [hasChanged, setHasChanged] = useState(true);
+  const [ensureNoDuplicate, setEnsureNoDuplicate] = useState(false);
 
   const form = useForm<QuestionFormType>({
     resolver: zodResolver(QuestionFormSchema),
@@ -58,13 +65,41 @@ export function QuestionForm({ prefill, questionId }: QuestionFormProps) {
         },
   });
 
+  useEffect(() => {
+    const subscription = form.watch((value, { name, type }) => {
+      if (type === "change" && (name === "explanation" || name === "title")) {
+        setHasChanged(true);
+        ("changed");
+      }
+    });
+
+    return () => subscription.unsubscribe();
+  }, [form.watch]);
+
   async function onSubmit(data: QuestionFormType) {
+    setHasChanged(false);
+
+    if (!isEditing && !ensureNoDuplicate) {
+      const similarQuestions = await findSimilarQuestion({
+        title: data.title,
+        content: data.explanation,
+      });
+
+      if (similarQuestions.length > 0) {
+        setSimilarQuestions(similarQuestions);
+        return;
+      }
+    }
+
     await createQuestion({
       body: data.explanation,
       tags: data.tags,
       title: data.title,
       questionId,
     });
+
+    setSimilarQuestions([]);
+    setEnsureNoDuplicate(false);
 
     toast({
       title: isEditing ? "Question updated" : "Question created",
@@ -107,6 +142,15 @@ export function QuestionForm({ prefill, questionId }: QuestionFormProps) {
       form.getValues("tags").filter((t: string) => t !== tag),
     );
   }
+
+  const showAlertDialog =
+    !ensureNoDuplicate &&
+    similarQuestions.length > 0 &&
+    !hasChanged &&
+    !isEditing &&
+    !form.formState.isSubmitting;
+
+  const disablePostButton = form.formState.isSubmitting || showAlertDialog;
 
   return (
     <Form {...form}>
@@ -204,10 +248,19 @@ export function QuestionForm({ prefill, questionId }: QuestionFormProps) {
             </FormItem>
           )}
         />
-        <Button disabled={form.formState.isSubmitting} type="submit">
+        <Button disabled={disablePostButton} type="submit">
           {getButtonLabel(isEditing, form.formState.isSubmitting)}
         </Button>
       </form>
+      {showAlertDialog && (
+        <SimilarityQuestionDialog
+          onEnsureNoDuplicate={() => {
+            setEnsureNoDuplicate(true);
+            setSimilarQuestions([]);
+          }}
+          similarQuestions={similarQuestions}
+        />
+      )}
     </Form>
   );
 }
