@@ -69,7 +69,6 @@ export function QuestionForm({ prefill, questionId }: QuestionFormProps) {
     const subscription = form.watch((value, { name, type }) => {
       if (type === "change" && (name === "explanation" || name === "title")) {
         setHasChanged(true);
-        ("changed");
       }
     });
 
