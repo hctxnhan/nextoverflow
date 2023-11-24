@@ -262,6 +262,7 @@ export async function getReplyOfAnswer({
     select: {
       author: {
         select: {
+          clerkId: true,
           picture: true,
           username: true,
           name: true,

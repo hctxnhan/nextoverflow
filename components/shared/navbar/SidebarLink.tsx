@@ -17,7 +17,7 @@ export function SidebarLink() {
           pathname === item.route;
 
         return (
-          <SheetClose asChild key={item.label}>
+          <SheetClose key={item.label}>
             <Link
               href={item.route}
               className={cn("base-medium flex items-center gap-2 p-2", {
