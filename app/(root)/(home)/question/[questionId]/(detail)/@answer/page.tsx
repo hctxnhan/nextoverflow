@@ -1,5 +1,5 @@
 import { PaginationSchema } from "@/lib/validation";
-import { AnswerList } from "../components/AnswerList";
+import { AnswerList } from "../../components/AnswerList";
 
 export default function Page({
   params: { questionId },

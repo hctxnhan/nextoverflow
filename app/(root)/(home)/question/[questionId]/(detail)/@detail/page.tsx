@@ -1,4 +1,4 @@
-import { QuestionDetail } from "../components/QuestionDetail";
+import { QuestionDetail } from "../../components/QuestionDetail";
 
 export default function Page({
   params: { questionId },
