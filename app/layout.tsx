@@ -8,6 +8,8 @@ import { ThemeProvider } from "@/context/ThemeProvider";
 import { cn } from "@/lib/utils";
 import { clerkStyleConfig } from "@/lib/clerkStyleConfig";
 import { Toaster } from "@/components/ui/toaster";
+import { AppProgressBar as ProgressBar } from "next-nprogress-bar";
+import { ProgressBarProvider } from "@/context/ProgressBarProvider";
 
 const body = Rubik({ subsets: ["latin"], variable: "--font-body" });
 
@@ -37,7 +39,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
             enableSystem
             disableTransitionOnChange
           >
-            {children}
+            <ProgressBarProvider>{children}</ProgressBarProvider>
           </ThemeProvider>
           <Toaster />
         </body>

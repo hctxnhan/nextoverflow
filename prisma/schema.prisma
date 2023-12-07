@@ -58,10 +58,10 @@ model Answer {
   updatedAt  DateTime @updatedAt
   author     User     @relation(fields: [authorId], references: [clerkId])
   authorId   String
-  question   Question @relation(fields: [questionId], references: [id])
+  question   Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
   questionId Int
   votes      Vote[]
-  parent     Answer?  @relation("ReplyTo", fields: [parentId], references: [id])
+  parent     Answer?  @relation("ReplyTo", fields: [parentId], references: [id], onDelete: Cascade)
   parentId   Int?
   replies    Answer[] @relation("ReplyTo")
 }

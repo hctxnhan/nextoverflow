@@ -1,7 +1,7 @@
 import { LeftSidebar } from "@/components/shared/left-sidebar/LeftSidebar";
 import { Navbar } from "@/components/shared/navbar/Navbar";
 import { RightSidebar } from "@/components/shared/right-sidebar/RightSidebar";
-import { ReactNode } from "react";
+import { ReactNode, Suspense } from "react";
 
 interface Props {
   children: ReactNode;

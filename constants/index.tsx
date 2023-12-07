@@ -70,8 +70,8 @@ export const SIDE_NAV_ITEMS: SidebarLink[] = [
 export const LOCAL_SEARCH_FILTER_OPTIONS = {
   question: [
     { label: "Newest", value: "newest" },
-    { label: "Recommended", value: "recommended" },
-    { label: "Frequent", value: "frequent" },
+    // { label: "Recommended", value: "recommended" },
+    // { label: "Frequent", value: "frequent" },
     { label: "Unanswered", value: "unanswered" },
     { label: "Popular", value: "popular" },
   ],

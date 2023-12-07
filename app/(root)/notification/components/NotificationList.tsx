@@ -45,7 +45,7 @@ export function NotificationList() {
 
     const res = await fetch(`/api/my-notification?${searchParams}`, {
       next: {
-        revalidate: 600,
+        revalidate: 5,
         tags: ["my-notification"],
       },
     });
@@ -132,7 +132,6 @@ export function NotificationList() {
     });
 
     return () => {
-      console.log("Closing EventSource");
       source.close();
     };
   }, []);

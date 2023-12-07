@@ -5,6 +5,7 @@ import { AnswerCard } from "./AnswerCard";
 import { getAnswerOfQuestion } from "@/lib/actions/answer.actions";
 import { Pagination } from "@/components/shared/pagination/Pagination";
 import { Suspense } from "react";
+import Loading from "../(detail)/@answer/loading";
 
 interface AnswerListProps {
   questionId: number;
@@ -29,14 +30,14 @@ export async function AnswerList({
         <p>
           {answers.length} Answer{answers.length > 1 && "s"}
         </p>
-        <Filter
+        {/* <Filter
           className="w-[200px] bg-background-darker"
           options={LOCAL_SEARCH_FILTER_OPTIONS.answers}
-        />
+        /> */}
       </div>
       <div className="mt-10 flex flex-col gap-8">
         {answers.map((answer) => (
-          <Suspense key={answer.id} fallback={<div>Loading...</div>}>
+          <Suspense key={answer.id} fallback={<Loading />}>
             <AnswerCard key={answer.id} answer={answer} />
           </Suspense>
         ))}

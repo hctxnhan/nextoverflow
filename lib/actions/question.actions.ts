@@ -237,8 +237,8 @@ export async function createQuestion(params: {
       tags: {
         deleteMany: {},
         connectOrCreate: params.tags.map((tag) => ({
-          where: { name: tag },
-          create: { name: tag },
+          where: { name: tag.trim().toLowerCase() },
+          create: { name: tag.trim().toLowerCase() },
         })),
       },
     },
@@ -252,8 +252,8 @@ export async function createQuestion(params: {
       },
       tags: {
         connectOrCreate: params.tags.map((tag) => ({
-          where: { name: tag },
-          create: { name: tag },
+          where: { name: tag.trim().toLowerCase() },
+          create: { name: tag.trim().toLowerCase() },
         })),
       },
     },
