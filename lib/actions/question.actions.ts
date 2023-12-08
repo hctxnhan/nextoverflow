@@ -77,11 +77,7 @@ export async function getQuestions({
       createdAt: true,
       _count: {
         select: {
-          answers: {
-            where: {
-              parentId: null,
-            },
-          },
+          answers: true,
           votes: {
             where: {
               voteType: "UPVOTE",
